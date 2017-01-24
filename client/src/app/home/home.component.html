@@ -1,0 +1,9 @@
+<div class="home" layout="column" flex="100">
+	<button md-raised-button (click)="onGetUsersClick()">getUsers</button>
+	<button md-raised-button (click)="onAddUsersClick()">addUser</button>
+	<button md-raised-button (click)="onDeleteUsersClick()">deleteUser</button>
+	<button md-raised-button (click)="onUpdateUsersClick()">updateUser</button>
+	<md-list>
+		<md-list-item *ngFor="let user of users"> {{user.fullName}} </md-list-item>
+	</md-list>
+</div>

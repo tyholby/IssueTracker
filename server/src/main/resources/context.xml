@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+    <Resource
+        name="jdbc/otm"
+        auth="Container"
+        driverClassName="oracle.jdbc.OracleDriver"
+        initialSize="0"
+        maxActive="15"
+        maxIdle="3"
+        minIdle="0"
+        maxWait="-1"
+        validationQuery="SELECT 1 FROM DUAL"
+        testOnBorrow="true"
+        testWhileIdle="true"
+        removeAbandoned="true"
+        removeAbandonedTimeout="60"
+        type="javax.sql.DataSource"
+        url=${db.url}
+        username=${db.username}
+        password=${db.password}/>
+</Context>

@@ -1,0 +1,11 @@
+<div id="sidebar-component" flex>
+	<ul>
+		<span *ngFor="let route of routes">
+			<a [routerLink]="[route.url]">
+			<li >
+				<h3 class="side-menu-header" >{{route.name}}</h3>
+			</li>
+		</a>
+		</span>
+	</ul>
+</div>

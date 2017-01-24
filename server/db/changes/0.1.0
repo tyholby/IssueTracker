@@ -1,0 +1,446 @@
+ALTER TABLE 
+missionary 
+RENAME COLUMN 
+status TO 
+missionarystatus;
+
+ALTER TABLE
+missionary
+ADD(
+bio VARCHAR2(2000)
+);
+
+ALTER TABLE
+  missionary
+DROP COLUMN
+  photourl;
+
+ ALTER TABLE
+  tutor
+DROP COLUMN
+  photourl;
+
+ALTER TABLE
+  volunteer
+DROP COLUMN
+  ratingid;
+
+ALTER TABLE
+  volunteer
+ADD(
+  preferredtimes VARCHAR2(100),
+  contactmethod  VARCHAR2(50),
+  location       VARCHAR2(50)
+);
+
+CREATE TABLE otm.area (
+  id		 VARCHAR2(50) NOT NULL,
+  name		 VARCHAR2(50) NOT NULL,
+  trainingcoordinatorid	 VARCHAR2(50),
+  trainingcoordinatorname    VARCHAR2(200),
+  trainingspecialistid VARCHAR2(50),
+  trainingspecialistname VARCHAR2(50),
+  CONSTRAINT area_pk PRIMARY KEY (id)
+);
+
+CREATE TABLE otm.zones (
+  id		 VARCHAR(50) NOT NULL,
+  name		 VARCHAR2(50) NOT NULL,
+  areaid	 VARCHAR2(50) NOT NULL,
+  CONSTRAINT zone_pk PRIMARY KEY (id)
+);
+
+ALTER TABLE otm.tutor RENAME COLUMN zoneassignment TO zoneid;
+
+CREATE TABLE otm.missionary_hours (
+  missionaryid		 VARCHAR2(50) NOT NULL,
+  tutorid		 VARCHAR2(50) NOT NULL,
+  hours	 VARCHAR2(40)
+);
+
+CREATE TABLE otm.locations (
+	id					NUMBER(20) NOT NULL,
+	name		VARCHAR2(20) NOT NULL
+);
+
+CREATE SEQUENCE otm.locations_seq
+  MINVALUE 1
+  START WITH 1
+  INCREMENT BY 1 
+  CACHE 20;
+
+CREATE SEQUENCE otm.comments_seq
+	MINVALUE 1
+	START WITH 1
+	INCREMENT BY 1 
+	CACHE 20;
+
+CREATE TABLE otm.comments (
+missionaryldsid    VARCHAR2(20) NOT NULL,
+comments  VARCHAR2(250) NOT NULL,
+tutorname VARCHAR2(50) NOT NULL,
+creationdate DATE NOT NULL,
+id NUMBER(20) NOT NULL,
+CONSTRAINT comments_pk PRIMARY KEY (id) );
+
+CREATE OR REPLACE TRIGGER otm.locations_auto
+BEFORE INSERT ON otm.locations
+FOR EACH ROW
+BEGIN
+	IF :new.id IS NULL THEN
+		SELECT otm.locations_seq.NEXTVAL INTO :new.id FROM dual;
+  END IF;
+END;
+/
+
+CREATE OR REPLACE TRIGGER otm.comments_auto
+BEFORE INSERT ON otm.comments
+FOR EACH ROW
+BEGIN
+	IF :new.id IS NULL THEN
+		SELECT otm.comments_seq.NEXTVAL INTO :new.id FROM dual;
+	END IF;
+END;
+/
+
+GRANT SELECT ON otm.locations TO otm_app;
+GRANT SELECT, INSERT, UPDATE, DELETE ON otm.locations TO otm_app;
+
+CREATE SYNONYM otm_app.locations FOR otm.locations;
+
+ALTER TABLE locations
+  MODIFY locationname varchar2(100);
+
+ALTER TABLE comments
+  ADD tutorldsid VARCHAR2(20) NOT NULL;
+
+ALTER TABLE companionships RENAME TO companionship;
+
+ALTER TABLE otm.locations RENAME TO location;
+
+ALTER TABLE otm.tutorlanguages RENAME TO tutorlanguage;
+
+ALTER TABLE otm.zones RENAME TO zone;
+
+ALTER TABLE otm.COMPANIONSHIP
+RENAME COLUMN mid TO missionaryid;
+
+ALTER TABLE otm.COMPANIONSHIP
+rename COLUMN cid TO companionshipid;
+
+ALTER TABLE otm.VOLUNTEER ADD firstname VARCHAR2(35);
+ALTER TABLE otm.VOLUNTEER ADD lastname VARCHAR2(35);
+
+ALTER TABLE comments
+  ADD rating NUMBER;
+
+CREATE TABLE otm.appointment_person (
+	appointmentid	VARCHAR2(50) NOT NULL,
+	personid		VARCHAR2(50) NOT NULL
+);
+
+CREATE TABLE otm.appointment (
+	id					NUMBER(12) NOT NULL,
+	type		VARCHAR2(100) NOT NULL,
+	starttime			date NOT NULL,
+	endtime				date NOT NULL,
+	location			VARCHAR2(50) NOT NULL,
+	cancelled			NUMBER(1) NOT NULL,
+	volunteernotes		VARCHAR2(2000)
+);
+
+CREATE TABLE otm.coordinator (
+	ldsid			    VARCHAR2(25) NOT NULL,
+	firstName			VARCHAR2(25) NOT NULL,
+	lastName			VARCHAR2(30) NOT NULL,
+    coordinatorRole     VARCHAR2(25) NOT NULL,
+    phonePrimary        VARCHAR2(20),
+    phoneMobile         VARCHAR2(20),
+    email               VARCHAR2(50),
+    skype               VARCHAR2(50),
+    CONSTRAINT coordinatorRole_chk CHECK (coordinatorRole IN ('trainingCoordinator', 'trainingSpecialist'))
+);
+
+ALTER TABLE tutorlanguage
+DROP CONSTRAINT fk_tutorid;
+
+ALTER TABLE otm.COMMENTS RENAME COLUMN missionaryldsid TO personldsid;
+
+DELETE FROM otm.comments;
+
+ALTER TABLE otm.COMMENTS add personldsId VARCHAR(20) NOT NULL
+ALTER TABLE otm.COMMENTS add comments VARCHAR(250) NOT NULL;
+ALTER TABLE otm.COMMENTS add id number(20) NOT NULL;
+ALTER TABLE otm.COMMENTS add creationdate DATE NOT NULL;
+ALTER TABLE otm.COMMENTS add commenttype VARCHAR(20) NOT NULL;
+
+ALTER TABLE otm.COMMENTS add tutorldsid VARCHAR(20);
+ALTER TABLE otm.COMMENTS add rating number;
+ALTER TABLE otm.COMMENTS add tutorname VARCHAR(50);
+ALTER TABLE otm.COMMENTS add CONSTRAINT comments_pk PRIMARY KEY (id);
+
+ALTER TABLE
+   area
+MODIFY
+   id  NUMBER(25);
+
+ALTER TABLE
+   zone
+MODIFY
+   id  NUMBER(25);
+
+CREATE SEQUENCE otm.zone_seq
+	MINVALUE 1
+	START WITH 1
+	INCREMENT BY 1
+	CACHE 20;
+
+CREATE OR REPLACE TRIGGER otm.zone_auto
+BEFORE INSERT ON otm.zone
+FOR EACH ROW
+BEGIN
+	IF :new.id IS NULL THEN
+		SELECT otm.zone_seq.NEXTVAL INTO :new.id FROM dual;
+	END IF;
+END;
+
+CREATE SEQUENCE otm.area_seq
+	MINVALUE 1
+	START WITH 1
+	INCREMENT BY 1
+	CACHE 20;
+
+CREATE OR REPLACE TRIGGER otm.area_auto
+BEFORE INSERT ON otm.area
+FOR EACH ROW
+BEGIN
+	IF :new.id IS NULL THEN
+		SELECT otm.area_seq.NEXTVAL INTO :new.id FROM dual;
+	END IF;
+END;
+
+CREATE TABLE otm.IMMERSIONDAY
+CREATE TABLE otm.IMMERSIONDATE
+(
+	immersionid varchar(25) NOT NULL,
+	starttime date NOT NULL,
+	endtime	date NOT NULL,
+	immersiondate date NOT NULL,
+);
+
+CREATE SEQUENCE appointments_seq
+    START WITH 1
+    INCREMENT BY 1
+    NOMAXVALUE;
+
+CREATE OR REPLACE TRIGGER otm.appointment_auto
+BEFORE INSERT ON otm.appointment
+FOR EACH ROW
+BEGIN
+	IF :new.id IS NULL THEN
+		SELECT otm.appointment_seq.NEXTVAL INTO :new.id FROM dual;
+	END IF;
+END;
+
+UPDATE appointment SET id = apointment_seq.nextval;
+
+UPDATE appointment SET cancelled = 0;
+
+ALTER TABLE otm.coordinator;
+
+DROP CONSTRAINT coordinatorRole_chk;
+
+ALTER TABLE otm.VOLUNTEER ADD volunteertype varchar(50);
+
+CREATE TABLE otm.IMMERSION
+(
+	missionaryid varchar(25)  NOT NULL,
+	immersionid varchar(25)  NOT NULL,
+	published number(1) DEFAULT 0,
+	approved number(1) DEFAULT 0,
+	publisheddate date DEFAULT NULL,
+	approveddate date DEFAULT NULL
+);
+
+CREATE TABLE otm.APPOINTMENT_VOLUNTEER
+(
+	appointmentid VARCHAR2(50) NOT NULL,
+	volunteerid VARCHAR2(50) NOT NULL,
+	requestpersonid VARCHAR2(50) NULL,
+	datecreated date DEFAULT SYSDATE,
+	assignedpersonid VARCHAR2(50) NULL
+);
+
+CREATE SEQUENCE otm.notification_seq
+	MINVALUE 1
+	START WITH 1
+	INCREMENT BY 1
+	CACHE 20;
+
+CREATE TABLE otm.notification (
+	id NUMBER(20) NOT NULL,
+	recipientid VARCHAR2(20) NOT NULL,
+	authorid VARCHAR2(20) NOT NULL,
+	text VARCHAR2(250),
+	link VARCHAR2(200),
+	viewed NUMBER(1) NOT NULL,
+	notificationtype NUMBER(1) NOT NULL,
+	creationdate DATE
+);
+
+CREATE OR REPLACE TRIGGER otm.notification_auto
+BEFORE INSERT ON otm.notification
+FOR EACH ROW
+BEGIN
+	IF :new.id IS NULL THEN
+		SELECT otm.notification_seq.NEXTVAL INTO :new.id FROM dual;
+	END IF;
+END;
+
+ALTER TABLE appointment ADD (appointmentTitle VARCHAR(50));
+
+ALTER TABLE appointment MODIFY (appointmentTitle NOT NULL);
+
+CREATE TABLE otm.appointment_language
+(
+    appointmentId VARCHAR2(50) NOT NULL,
+    language VARCHAR(50) NOT NULL,
+    fluency VARCHAR(50) NOT NULL
+);
+
+ALTER TALBE otm.comments RENAME COLUMN personldsid TO recipientid;
+ALTER TALBE otm.comments DROP COLUMN tutorname;
+ALTER TALBE otm.comments RENAME COLUMN tutorldsid TO authorid;
+ALTER TALBE otm.comments RENAME COLUMN comments TO text;
+ALTER TALBE otm.comments RENAME COLUMN commenttype TO type;
+ALTER TALBE otm.volunteer RENAME COLUMN volunteertype TO type;
+ALTER TALBE otm.volunteer RENAME COLUMN ldsid TO ldsaccountid;
+ALTER TALBE otm.coordinator RENAME COLUMN ldsid TO ldsaccountid;
+
+ALTER TABLE missionary_tutor ADD (hours VARCHAR2(40));
+
+ALTER TABLE missionary_tutor RENAME TO tutorassignments;
+
+DROP TABLE missionary_hours;
+
+ALTER TABLE appointment_person RENAME COLUMN ldsid TO ldsaccountid;
+
+ALTER TABLE area DROP COLUMN trainingcoordinatorname;
+
+ALTER TABLE area DROP COLUMN trainingspecialistname;
+
+ALTER TABLE otm.IMMERSION
+  RENAME COLUMN immersionid to id;
+
+
+ALTER TABLE otm.IMMERSION
+	RENAME COLUMN createdate to creationdate;
+
+ALTER TABLE otm.IMMERSION
+DROP COLUMN published;
+
+ALTER TABLE otm.IMMERSION
+DROP COLUMN approved;
+
+ALTER TABLE otm.MISSIONARY
+  RENAME COLUMN missionarytype to type;
+
+ALTER TABLE otm.volunteer
+  ADD lastupdated Date;
+
+ALTER TABLE otm.appointment ADD linkedid NUMBER DEFAULT 0;
+
+alter table notification drop column notificationtype;
+
+ALTER TABLE notification
+  ADD clicked NUMBER(1,0) DEFAULT(0) NOT NULL;
+
+ALTER TABLE otm.immersion ADD comments VARCHAR2(200);
+
+ALTER TABLE otm.immersion ADD language VARCHAR2(50);
+
+ALTER TABLE otm.immersion ADD companionid VARCHAR2(25);
+
+CREATE TABLE otm.globalsettings
+(
+	sunday number(1) DEFAULT 0,
+	monday number(1) DEFAULT 0,
+	tuesday number(1) DEFAULT 0,
+	wednesday number(1) DEFAULT 0,
+	thursday number(1) DEFAULT 0,
+	friday number(1) DEFAULT 0,
+	saturday number(1) DEFAULT 0,
+	mute number(1) DEFAULT 0
+);
+
+ALTER TABLE otm.VOLUNTEER ADD donotemail NUMBER(1) DEFAULT 0;
+
+ALTER TABLE otm.VOLUNTEER ADD donotphone NUMBER(1) DEFAULT 0;
+
+ALTER TABLE OTM.APPOINTMENT ADD callstatus varchar2(45);
+
+ALTER TABLE otm.appointment ADD status VARCHAR2(50) DEFAULT 'normal';
+
+ALTER TABLE otm.notification add flagged number(1) DEFAULT 0;
+
+CREATE TABLE otm.deleteme_bogusemail
+(
+    bogus_email VARCHAR2(50) NOT NULL
+);
+
+INSERT into DELETEME_BOGUSEMAIL(bogus_email) values('bogus@bogus.bogus');
+
+ALTER TABLE OTM.missionary ADD gender varchar2(25);
+
+ALTER TABLE otm.appointment ADD locationtype VARCHAR2(50) DEFAULT 'In Person';
+
+ALTER TABLE otm.missionary ADD image varchar2(200);
+
+ALTER TABLE otm.tutor ADD image varchar2(200);
+
+ALTER TABLE otm.coordinator ADD image varchar2(200);
+
+
+CREATE TABLE role
+(
+id NUMBER(10) NOT NULL,
+userid VARCHAR2(50) NOT NULL,
+userFullName varchar(150) NOT NULL,
+isTC NUMBER(1,0) DEFAULT 0,
+isTS NUMBER(1,0) DEFAULT 0,
+isTutor NUMBER(1,0) DEFAULT 0,
+isVC NUMBER(1,0) DEFAULT 0,
+assignedBy VARCHAR2(150) DEFAULT NULL,
+assignedDate DATE DEFAULT NULL
+);
+ALTER TABLE role ADD (
+CONSTRAINT role_pk PRIMARY KEY (ID));
+CREATE SEQUENCE role_seq;
+CREATE OR REPLACE TRIGGER role_bir
+BEFORE INSERT ON role
+FOR EACH ROW
+BEGIN
+SELECT role_seq.NEXTVAL
+INTO :new.id
+FROM dual;
+END;
+
+GRANT SELECT ON smlt.role TO smlt_app;
+GRANT SELECT, INSERT, UPDATE, DELETE ON smlt.role TO smlt_app;
+
+ALTER TABLE missionary
+MODIFY (ldsaccountid VARCHAR (36));
+ALTER TABLE comments
+MODIFY (recipientid VARCHAR (36));
+ALTER TABLE companionship
+MODIFY (missionaryid VARCHAR (36),companionid VARCHAR (36));
+ALTER TABLE tutorassignments
+MODIFY (missionaryid VARCHAR (36));
+ALTER TABLE notification
+MODIFY (RECIPIENTID VARCHAR (36),AUTHORID VARCHAR (36));
+
+ALTER TABLE companionship
+DROP CONSTRAINT FK_CID;
+
+ALTER TABLE companionship
+DROP CONSTRAINT FK_MID;

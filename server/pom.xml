@@ -1,0 +1,279 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>edu.byu.mtc</groupId>
+	<artifactId>otm</artifactId>
+	<packaging>war</packaging>
+	<version>1.6.0</version>
+	<name>otm</name>
+	<url>https://app.mtc.byu.edu/otm</url>
+
+	<properties>
+		<deploy.version>01.04.00</deploy.version>
+		<spring.version>3.2.13.RELEASE</spring.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<profiles>
+		<profile>
+			<id>test</id>
+			<properties>
+				<tomcat.deploy.path>/otm</tomcat.deploy.path>
+				<db.url>"jdbc:oracle:thin:@devdb.mtc.byu.edu:1601/test01"</db.url>
+				<db.username>"smlt_app"</db.username>
+				<db.password>"smlt_apppw"</db.password>
+			</properties>
+		</profile>
+		<profile>
+			<id>beta</id>
+			<properties>
+				<tomcat.deploy.path>/otm</tomcat.deploy.path>
+				<db.url>"jdbc:oracle:thin:@devdb.mtc.byu.edu:1601/beta01"</db.url>
+				<db.username>"smlt_app"</db.username>
+				<db.password>"smlt_apppw"</db.password>
+			</properties>
+		</profile>
+		<profile>
+			<id>stage</id>
+			<properties>
+				<tomcat.deploy.path>/otm</tomcat.deploy.path>
+				<db.url>"jdbc:oracle:thin:@devdb.mtc.byu.edu:1601/stage01"</db.url>
+				<db.username>"smlt_app"</db.username>
+				<db.password>"smlt_apppw"</db.password>
+			</properties>
+		</profile>
+		<profile>
+			<id>support</id>
+			<properties>
+				<tomcat.deploy.path>/otm</tomcat.deploy.path>
+				<db.url>"jdbc:oracle:thin:@devdb.mtc.byu.edu:1601/support01"</db.url>
+				<db.username>"otm_app"</db.username>
+				<db.password>"notablesforme"</db.password>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<tomcat.deploy.path>/otm</tomcat.deploy.path>
+				<db.url>"jdbc:oracle:thin:@mtcdb.mtc.byu.edu:1601/mtc1"</db.url>
+				<db.username>"otm_app"</db.username>
+				<db.password>"notablesforme"</db.password>
+			</properties>
+		</profile>
+		<profile>
+			<id>local</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+
+			<properties>
+				<tomcat.deploy.server>localhost</tomcat.deploy.server>
+				<tomcat.deploy.port>:8080</tomcat.deploy.port>
+				<tomcat.deploy.user>user</tomcat.deploy.user>
+				<tomcat.deploy.pass>password</tomcat.deploy.pass>
+				<tomcat.deploy.path>/otm</tomcat.deploy.path>
+				<db.url>"jdbc:oracle:thin:@devdb.mtc.byu.edu:1601/dev01"</db.url>
+				<db.username>"seniorprogrammertest"</db.username>
+				<db.password>"seniorprogrammertestpw"</db.password>
+			</properties>
+		</profile>
+
+	</profiles>
+
+
+	<dependencies>
+
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.6</version>
+		</dependency>
+
+
+		<!--Http Components-->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.3.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+			<version>4.3.1</version>
+		</dependency>
+
+		<!-- Spring 3 dependencies -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>1</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.twilio.sdk</groupId>
+			<artifactId>twilio-java-sdk</artifactId>
+			<version>3.3.15</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>6.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.amber</groupId>
+			<artifactId>amber-oauth2-common</artifactId>
+			<version>0.22-incubating</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.amber</groupId>
+			<artifactId>amber-oauth2-resourceserver</artifactId>
+			<version>0.22-incubating</version>
+		</dependency>
+
+		<!--Quartz-Scheduler dependency-->
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<finalName>otm</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.0</version>
+				<configuration>
+					<url>http://${tomcat.deploy.server}${tomcat.deploy.port}/manager/text</url>
+					<username>${tomcat.deploy.user}</username>
+					<password>${tomcat.deploy.pass}</password>
+					<path>${tomcat.deploy.path}##${deploy.version}</path>
+					<tag>${project.build.finalName}</tag>
+					<update>true</update>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<!-- Resources defined here will get copied to the root of the war file -->
+					<webResources>
+						<resource>
+							<!-- this is relative to the war directory -->
+							<targetPath>META-INF</targetPath>
+							<!-- this is relative to the pom.xml directory -->
+							<directory>src/main/resources/</directory>
+							<filtering>true</filtering>
+							<includes>
+								<include>*.xml</include>
+							</includes>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<encoding>UTF-8</encoding>
+					<executable>${env.JAVA_HOME}/bin/javac</executable>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

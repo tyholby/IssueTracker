@@ -1,0 +1,28 @@
+@import '../../../../main.less';
+
+#sidebar-component {
+	background-color:@sidebar-background;
+	width:215px;
+
+	.side-menu-link-active{
+		li{
+			background-color:@sidebar-background-hover;
+		}
+	}
+
+	ul {
+		margin:0;
+		padding:0;
+
+		li {
+			padding-left:30px;
+			padding-top:11px;
+			padding-bottom:12px;
+			cursor:pointer;
+
+			&:hover {
+				background-color:@sidebar-background-hover;
+			}
+		}
+	}
+}
