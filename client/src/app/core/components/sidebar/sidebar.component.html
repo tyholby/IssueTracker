@@ -1,11 +1,8 @@
-<div id="sidebar-component" flex>
-	<ul>
-		<span *ngFor="let route of routes">
-			<a [routerLink]="[route.url]">
-			<li >
-				<h3 class="side-menu-header" >{{route.name}}</h3>
-			</li>
-		</a>
-		</span>
-	</ul>
+<div flex id="sidebar-component" layout-align="start center" layout="row">
+	<a *ngFor="let route of routes" [routerLink]="[route.url]" (click)="active = route.name" layout="row" layout-align="center center" flex="5"
+	[class.active-route]="route.name === active" class="route-container">
+		<h4 class="route-name">{{route.name}}</h4>
+	</a>
+	<div flex></div>
+	<button md-raised-button color="accent" class="create-new">Create New Issue +</button>
 </div>

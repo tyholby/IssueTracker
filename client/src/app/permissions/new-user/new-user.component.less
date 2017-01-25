@@ -1,0 +1,50 @@
+@import '../../../main.less';
+
+.new-user{
+	padding: 10px;
+	width: 350px;
+	height: 200px;
+	.search{
+		width: 95%;
+	}
+	.search-results{
+		width: 95%;
+		padding: 5px;
+		max-height: 100px;
+		overflow-y: auto;
+		cursor: pointer;
+		.user-row{
+			&:hover{
+				background-color: @green1;
+				color: white;
+			}
+		}
+	}
+	.user-level-row{
+		width: 100%;
+		.role-choice{
+			text-align: center;
+			cursor: pointer;
+		}
+		.role-active{
+			background-color: @green1;
+			color: white;
+		}
+	}
+	.user-row {
+		min-height: 20px;
+		margin-top: 5px;
+		margin-bottom: 5px;
+		.user-avatar{
+			margin-right: 15px;
+			min-height: 30px;
+		}
+	}
+	.button-row{
+		button{
+			margin-right: 5px;
+			margin-left: 5px;
+			font-size: 12px;
+		}
+	}
+}

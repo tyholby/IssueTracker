@@ -11,11 +11,18 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { HomeComponent } from './home/home.component';
 import { UserService } from './services/UserService/user.service';
+import { PermissionsComponent } from './permissions/permissions.component';
+import { routes } from './app.routes';
+import { NewUserComponent } from './permissions/new-user/new-user.component';
+import { EditUserComponent } from './permissions/edit-user/edit-user.component';
 
 @NgModule({
 	declarations: [
 		AppComponent,
-		HomeComponent
+		HomeComponent,
+		PermissionsComponent,
+		NewUserComponent,
+		EditUserComponent
 	],
 	imports: [
 		BrowserModule,
@@ -25,12 +32,7 @@ import { UserService } from './services/UserService/user.service';
 		MTCCommonModule,
 		CoreModule,
 		MaterialModule.forRoot(),
-		RouterModule.forRoot([
-			{
-				path: '',
-				component: HomeComponent
-			}
-		], {useHash: true}),
+		RouterModule.forRoot(routes, {useHash: true}),
 		SimpleNotificationsModule
 	],
 	providers: [
@@ -38,7 +40,9 @@ import { UserService } from './services/UserService/user.service';
 	],
 	bootstrap: [AppComponent],
 	entryComponents: [
-		SimpleConfirmationComponent
+		SimpleConfirmationComponent,
+		NewUserComponent,
+		EditUserComponent
 	]
 })
 export class AppModule { }

@@ -7,36 +7,12 @@ import { UserService } from '../services/UserService/user.service';
   styleUrls: ['./home.component.less']
 })
 export class HomeComponent implements OnInit {
-	users: Array<any>;
 
-	constructor(private userService: UserService) {
-		this.users = [];
+	constructor() {
 	}
 
 	ngOnInit() {
 
-	}
-
-	onGetUsersClick() {
-		this.userService.getUsers().subscribe((usersResponse) => {
-			console.log('usersResponse.json()', usersResponse.json());
-			this.users = usersResponse.json();
-		});
-	}
-	onAddUsersClick() {
-		this.userService.addUser({ fullName: 'test', ldsid: 12344, role: 'test' }).subscribe((usersResponse) => {
-			console.log('usersResponse.json()', usersResponse.json());
-		});
-	}
-	onDeleteUsersClick() {
-		this.userService.deleteUser(12344).subscribe((usersResponse) => {
-			console.log('usersResponse.json()', usersResponse.json());
-		});
-	}
-	onUpdateUsersClick() {
-		this.userService.updateUser({ fullName: 'changed', ldsid: 12344, role: 'test' }).subscribe((usersResponse) => {
-			console.log('usersResponse.json()', usersResponse.json());
-		});
 	}
 
 	/* TODO storage API

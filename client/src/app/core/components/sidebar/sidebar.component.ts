@@ -6,11 +6,13 @@ import { Component } from '@angular/core';
 	styleUrls: ['sidebar.component.less']
 })
 export class SidebarComponent {
-	public routes: any[];
+	routes: any[];
+	active = 'Board';
 
 	constructor() {
 		this.routes = [
-			{url: '', name:'Home'},
+			{url: '', name:'Board'},
+			{url: 'permissions', name:'Permissions'},
 		];
 	}
 }

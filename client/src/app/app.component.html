@@ -3,14 +3,18 @@
 <mtc-layout></mtc-layout>
 <simple-notifications [options]="toastOptions"></simple-notifications>
 <md-toolbar flex color="primary">
-	<span flex="20">My Application Title</span>
+	<div flex="5" id="mtc-logo">
+		<img src="../assets/images/mtclogo.svg" alt="logo">
+	</div>
+	<span flex="20">Issue Tracker</span>
 	<div flex></div>
-	<img *ngIf="user" src="{{'https://api.mtc.byu.edu/user/v1/users/' + user.id}}" alt="User Photo" width="50" height="50">
-	<span *ngIf="user" flex="15" style="margin-left: 15px; margin-right: 15px;">{{user.name}}</span>
-	<button flex="5" md-raised-button (click)="logout()" color="accent">LOGOUT</button>
+	<span *ngIf="user" flex="10" class="user-name" layout="row" layout-align="end">
+		{{userService.currentLdsAccount.name}}
+			<i class="material-icons"> arrow_drop_down </i>
+	</span>
 </md-toolbar>
-<div class="app-main" layout="row" flex>
-	<app-sidebar layout="column" *ngIf="authorized"></app-sidebar>
+<div class="app-main" layout="column" flex>
+	<app-sidebar layout="row"></app-sidebar>
 	<div layout="column" flex class="main" id="main">
 		<div class="content" layout="column" flex>
 			<router-outlet></router-outlet>

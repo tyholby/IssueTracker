@@ -1,0 +1,18 @@
+<div class="edit-user" flex layout="column" layout-align="start center">
+	<md-progress-bar mode="indeterminate" *ngIf="showProgress"></md-progress-bar>
+	<div class="user-row" flex layout="row" layout-align="start center">
+		<img class="user-avatar" src="{{'https://api.mtc.byu.edu/user/v1/users/' + selectedUser.ldsid}}" alt="User Photo" width="30">
+		{{selectedUser.fullName}}
+	</div>
+	<div class="user-level-row" flex layout="row" layout-align="start center">
+		<span flex="20"></span>
+		<span flex="30">User Level:</span>
+		<div flex="15" class="role-choice" [class.role-active]="selectedUser.role === 'admin'" (click)="setRole('admin')">Admin</div>
+		<div flex="15" class="role-choice" [class.role-active]="selectedUser.role === 'user'" (click)="setRole('user')">User</div>
+		<span flex="20"></span>
+	</div>
+	<div class="button-row" flex layout="row" layout-align="start center">
+		<button md-raised-button color="warn" [disabled]="showProgress" (click)="onDelete()">DELETE</button>
+		<button md-button class="cancel-button" (click)="onCancel()">CANCEL</button>
+	</div>
+</div>
