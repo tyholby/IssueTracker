@@ -32,4 +32,7 @@
     <bean id="UserDAO" class="edu.byu.mtc.otm.daos.UserDAO">
         <property name="dataSource" ref="otm" />
     </bean>
+    <bean id="StatusDAO" class="edu.byu.mtc.otm.daos.StatusDAO">
+        <property name="dataSource" ref="otm" />
+    </bean>
 </beans>

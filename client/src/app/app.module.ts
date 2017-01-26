@@ -6,6 +6,7 @@ import { MTCCommonModule, MTCCoreModule, SimpleConfirmationComponent } from 'mtc
 import { MaterialModule } from '@angular/material';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { RouterModule } from '@angular/router';
+import { DndModule } from 'ng2-dnd';
 
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
@@ -15,6 +16,8 @@ import { PermissionsComponent } from './permissions/permissions.component';
 import { routes } from './app.routes';
 import { NewUserComponent } from './permissions/new-user/new-user.component';
 import { EditUserComponent } from './permissions/edit-user/edit-user.component';
+import { StatusService } from './services/StatusService/status.service';
+import { NewStatusComponent } from './permissions/new-status/new-status.component';
 
 @NgModule({
 	declarations: [
@@ -22,7 +25,8 @@ import { EditUserComponent } from './permissions/edit-user/edit-user.component';
 		HomeComponent,
 		PermissionsComponent,
 		NewUserComponent,
-		EditUserComponent
+		EditUserComponent,
+		NewStatusComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -32,17 +36,21 @@ import { EditUserComponent } from './permissions/edit-user/edit-user.component';
 		MTCCommonModule,
 		CoreModule,
 		MaterialModule.forRoot(),
-		RouterModule.forRoot(routes, {useHash: true}),
+		RouterModule.forRoot(routes, { useHash: true }),
+		DndModule.forRoot(),
 		SimpleNotificationsModule
 	],
 	providers: [
-		UserService
+		UserService,
+		StatusService
 	],
 	bootstrap: [AppComponent],
 	entryComponents: [
 		SimpleConfirmationComponent,
 		NewUserComponent,
-		EditUserComponent
+		EditUserComponent,
+		NewStatusComponent,
 	]
 })
-export class AppModule { }
+export class AppModule {
+}

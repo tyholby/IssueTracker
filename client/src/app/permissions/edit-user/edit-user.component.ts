@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MTCDialogService } from 'mtc-modules';
+import { UserService } from '../../services/UserService/user.service';
 
 @Component({
 	selector: 'app-edit-user',
@@ -9,8 +10,10 @@ import { MTCDialogService } from 'mtc-modules';
 export class EditUserComponent implements OnInit {
 	selectedUser: any;
 	showProgress: boolean = false;
+	showDeleteConfirmation: boolean = false;
+	updatedUser:boolean = false;
 
-	constructor(private dialogService: MTCDialogService) {
+	constructor(private dialogService: MTCDialogService, private userService: UserService) {
 	}
 
 	ngOnInit() {
@@ -18,15 +21,21 @@ export class EditUserComponent implements OnInit {
 	}
 
 	setRole(role) {
-		//TODO delete user task
+		this.selectedUser.role = role;
+		this.updatedUser = true;
+		this.userService.updateUser(this.selectedUser).subscribe();
 	}
 
 	onDelete() {
-		//TODO delete user task
+		this.showProgress = true;
+		this.userService.deleteUser(this.selectedUser.ldsid).subscribe(response => {
+			this.showProgress = false;
+			this.dialogService.hide(true);
+		});
 	}
 
-	onCancel() {
-		//TODO delete user task
+	onDone() {
+		this.dialogService.hide(this.updatedUser);
 	}
 
 

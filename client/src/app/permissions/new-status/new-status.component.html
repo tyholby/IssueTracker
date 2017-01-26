@@ -1,0 +1,7 @@
+<div class="new-status" flex layout="column" layout-align="start center">
+	<input class="status-name" type="text" flex="25" placeholder="status name" [(ngModel)]="statusName">
+	<div class="button-row" flex layout="row" layout-align="start center">
+		<button md-raised-button color="primary" [disabled]="!statusName.length || showProgress" (click)="onSubmit()">SUBMIT</button>
+		<button md-button class="cancel-button" (click)="onCancel()">CANCEL</button>
+	</div>
+</div>
