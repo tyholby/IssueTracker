@@ -19,7 +19,7 @@ export class StatusService {
 	deleteStatus(id) {
 		return this.http.delete(`${this.hostname.travelUrl}status/${id}`);
 	}
-	updateStatus(status) {
-		return this.http.put(`${this.hostname.travelUrl}status/`, JSON.stringify(status));
+	updateStatuses(statuses) {
+		return this.http.put(`${this.hostname.travelUrl}status/`, JSON.stringify(statuses));
 	}
 }

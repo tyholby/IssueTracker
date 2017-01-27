@@ -1,0 +1,52 @@
+@import '../../main.less';
+
+.create-issue{
+	width: 100%;
+	min-width: 200px;
+	padding: 8px;
+	.progress{
+		width: 90%;
+		margin: 0 auto;
+	}
+	.header{
+		padding: 6px 8px;
+		margin: 4px;
+		height: 29px;
+		background-color: @green1;
+		color: white;
+		font-size: 16px;
+		text-align: left;
+		box-shadow: 5px 5px 5px @grey2;
+	}
+	.edit-container{
+		background-color: white;
+		border: solid @green1 1px;
+		padding: 5px 10px;
+		margin: 4px;
+		box-shadow: 5px 5px 5px @grey2;
+		.add-attachments-button{
+			cursor: pointer;
+			color: @grey1;
+		}
+		.close-button{
+			text-align: right;
+			cursor: pointer;
+			margin-bottom: 20px;
+		}
+		.input-row{
+			width: 100%;
+			min-height: 17px;
+			margin-top: 5px;
+			margin-bottom: 5px;
+			font-size: 14px;
+			.attachments-container{
+				width: 100%;
+				text-align: left;
+				.remove-attachment-button{
+					font-size: 17px;
+					cursor: pointer;
+				}
+			}
+		}
+	}
+}

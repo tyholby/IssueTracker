@@ -25,31 +25,42 @@ export class PermissionsComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		this.userService.currentUser$.subscribe(user => {
+			this.resetUsers();
+			this.resetStatuses();
+		});
 		this.resetUsers();
 		this.resetStatuses();
 	}
 
 	resetUsers() {
-		this.userService.getUsers().subscribe((usersResponse) => {
-			this.admins = usersResponse.json().filter(u => {
-				return u.role === 'admin';
+		const { currentUser } = this.userService;
+		if (currentUser.role !== null) {
+			this.userService.getUsers().subscribe((usersResponse) => {
+				this.admins = usersResponse.json().filter(u => {
+					return u.role === 'admin';
+				});
+				this.users = usersResponse.json().filter(u => {
+					return u.role === 'user';
+				});
 			});
-			this.users = usersResponse.json().filter(u => {
-				return u.role === 'user';
-			});
-		});
+		}
 	}
 
 	resetStatuses() {
 		this.statusService.getStatuses().subscribe((statusesResponse) => {
 			this.statuses = statusesResponse.json();
+			console.log('statuses', this.statuses)
 		});
 	}
 
 	fixStatusOrders() {
 		this.statuses.forEach((status, i) => {
-			status.ordernum = i + 1;
-			status.edited = true;
+			const newOrdernum = i + 1;
+			if (status.ordernum !== newOrdernum) {
+				status.ordernum = newOrdernum;
+				status.edited = true;
+			}
 		});
 		this.saveStatuses();
 	}
@@ -78,11 +89,11 @@ export class PermissionsComponent implements OnInit {
 		});
 	}
 
-	onDeleteStatus(status) {
+	onDeleteStatus(status, i) {
 		this.dialogService.show(SimpleConfirmationComponent, 350, 200).subscribe(deletedStatus => {
 			if (deletedStatus) {
 				this.statusService.deleteStatus(status.id).subscribe(response => {
-					this.resetStatuses();
+					this.statuses.splice(i, 1);
 					this.fixStatusOrders();
 				});
 			}
@@ -94,22 +105,24 @@ export class PermissionsComponent implements OnInit {
 	}
 
 	saveStatuses() {
-		let toUpdate = 0;
+		let toUpdate = [];
 		this.statuses.forEach(status => {
 			if (status.edited) {
 				delete status.edited;
-				toUpdate++;
-				this.statusService.updateStatus(status).subscribe(response => {
-					toUpdate--;
-					if (toUpdate >= 0) {
-						if (this.editStatuses) {
-							this.editStatuses = false;
-						}
-						this.resetStatuses();
-					}
-				});
+				toUpdate.push(status);
 			}
 		});
+		if (toUpdate.length > 0) {
+			this.statusService.updateStatuses(toUpdate).subscribe(response => {
+				if (this.editStatuses) {
+					this.editStatuses = false;
+				}
+				this.resetStatuses();
+			});
+		}
+		else {
+			this.editStatuses = false;
+		}
 	}
 
 }

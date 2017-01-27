@@ -35,4 +35,10 @@
     <bean id="StatusDAO" class="edu.byu.mtc.otm.daos.StatusDAO">
         <property name="dataSource" ref="otm" />
     </bean>
+    <bean id="IssueDAO" class="edu.byu.mtc.otm.daos.IssueDAO">
+        <property name="dataSource" ref="otm" />
+    </bean>
+    <bean id="AttachmentDAO" class="edu.byu.mtc.otm.daos.AttachmentDAO">
+        <property name="dataSource" ref="otm" />
+    </bean>
 </beans>

@@ -1,2 +1,36 @@
-<div class="home" layout="column" flex="100">
+<md-progress-bar class="progress" mode="indeterminate" *ngIf="!issuesLoaded"></md-progress-bar>
+<div class="home" layout="row" flex="100">
+	<table class="issues-table" flex>
+		<tr flex layout="row">
+			<th flex *ngFor="let status of statuses">{{status.description}}</th>
+		</tr>
+
+		<tr flex *ngFor="let user of users">
+			<td flex layout="column" *ngIf="statuses.length && users.length && issuesLoaded">
+				<div class="user-header" flex (click)="user.expanded = !user.expanded">
+					<i class="material-icons expand-button">
+						{{user.expanded ? 'expand_more' : 'expand_less'}}
+					</i>
+					{{user.fullName}}
+				</div>
+				<div class="issues-container" flex layout="row" *ngIf="user.expanded">
+					<div class="issue-column" dnd-droppable (onDropSuccess)="onDropSuccess($event.dragData, status.id, user)"
+						 [class.droppable]="allowDropFunction(user.ldsid, status.id)(dragging)"
+						 [allowDrop]="allowDropFunction(user.ldsid, status.id)"
+						 flex layout="column" *ngFor="let status of statuses">
+						<div class="issue-cell" dnd-draggable [dragEnabled]="true" [dragData]="issue"
+							 (onDragStart)="onDragStart($event)" (onDragEnd)="onDragEnd($event)"
+							 flex layout="row" *ngFor="let issue of user.issues[status.id]">
+							<img class="user-avatar" src="{{'https://api.mtc.byu.edu/user/v1/users/' + user.ldsid}}"
+								 alt="User Photo" width="38" height="38">
+							<div class="issue-info" flex layout="column">
+								<span class="issue-title">{{issue.title}}</span>
+								<span class="issue-date">{{issue.duedate | date:'longDate'}}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
 </div>

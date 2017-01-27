@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/UserService/user.service';
+import { StatusService } from '../services/StatusService/status.service';
+import { IssueService } from '../services/IssueService/issue.service';
 
 @Component({
   selector: 'app-home',
@@ -7,33 +9,92 @@ import { UserService } from '../services/UserService/user.service';
   styleUrls: ['./home.component.less']
 })
 export class HomeComponent implements OnInit {
+	statuses = [];
+	users = [];
+	issuesLoaded = false;
+	dragging: any = null;
 
-	constructor() {
+	constructor(private userService: UserService,
+				private statusService: StatusService,
+				private issueService: IssueService) {
 	}
 
 	ngOnInit() {
-
+		this.issueService.newIssueAdded$.subscribe(issue => {
+			this.resetIssues();
+		});
+		this.userService.currentUser$.subscribe(user => {
+			this.reset();
+		});
+		this.reset();
 	}
 
-	/* TODO storage API
-	HTML:
-	<mtc-file [preview]="true" [name]="'Upload Image'" (onFileSelected)="onImageFileSelected($event)"></mtc-file>
+	reset() {
+		const { currentUser } = this.userService;
+		if (currentUser.role !== null) {
+			this.userService.getUsers().subscribe(usersResponse => {
+				this.users = usersResponse.json().map(user => {
+					user.expanded = false;
+					return user;
+				});
+				if (!this.userService.isAdmin(currentUser)) {
+					this.users = this.users.filter(user => user.ldsid === currentUser.ldsid);
+				}
+				this.resetIssues();
+			});
+			this.statusService.getStatuses().subscribe(statusesResponse => {
+				this.statuses = statusesResponse.json();
+			});
+		}
+	}
 
-	TS:
-	import { StorageApiService } from 'mtc-modules';
-
-	onImageFileSelected(file) {
-		this.storageService.submitFile(file).subscribe((uploadDetails) => {
-			console.log('submitted', uploadDetails);
-			----- uploadDetails looks like this:
-			{
-				extension: ".jpg",
-				mimeType: "image/jpeg",
-				sha1: "kBWpRHvSHhQfS33jpQaZXNB0JhI=",
-				url: "https://cdn.mtc.byu.edu/storage/5ad9e458-a4f9-4252-b6aa-b6be8305762f/dev/e53b3810-2856-4e26-b7ab-4867420491c2.jpg"
-			}
-			------
+	resetIssues() {
+		this.issuesLoaded = false;
+		this.issueService.getIssues().subscribe(issuesResponse => {
+			this.users.forEach(user => {
+				user.issues = {};
+				issuesResponse.json().forEach(issue => {
+					if (user.ldsid === issue.assigneeid) {
+						this.addIssueByStatus(user.issues, issue, issue.statusid);
+					}
+				});
+			});
+			this.issuesLoaded = true;
 		});
 	}
-	*/
+
+	addIssueByStatus(issuesObject, issue, toStatusId) {
+		if (!issuesObject[toStatusId]) {
+			issuesObject[toStatusId] = [];
+		}
+		issuesObject[toStatusId].push(issue);
+	}
+
+	allowDropFunction(userId, statusId) {
+		return dragData => {
+			return dragData && !(dragData.assigneeid === userId && dragData.statusid === statusId);
+		};
+	}
+
+	onDragStart(issue) {
+		this.dragging = issue;
+	}
+
+	onDragEnd(issue) {
+		this.dragging = null;
+	}
+
+	onDropSuccess(issue, newStatusId, newUser) {
+		const oldStatusId = issue.statusid;
+		const oldUser = this.users.find(user => user.ldsid === issue.assigneeid);
+		let newIssue = Object.assign({}, issue);
+		newIssue.statusid = newStatusId;
+		newIssue.assigneeid = newUser.ldsid;
+
+		this.issueService.updateIssues([newIssue]).subscribe(issuesResponse => {
+			const index = oldUser.issues[oldStatusId].indexOf(issue);
+			oldUser.issues[oldStatusId].splice(index, 1);
+			this.addIssueByStatus(newUser.issues, newIssue, newStatusId);
+		});
+	}
 }

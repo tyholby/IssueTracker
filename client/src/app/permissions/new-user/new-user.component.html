@@ -18,8 +18,8 @@
 		<div flex="15" class="role-choice" [class.role-active]="selectedUser.role === 'user'" (click)="setRole('user')">User</div>
 		<span flex="20"></span>
 	</div>
-	<div *ngIf="selectedUser" class="button-row" flex layout="row" layout-align="start center">
-		<button md-raised-button color="primary" [disabled]="selectedUser.role === null || showProgress" (click)="onSubmit()">SUBMIT</button>
+	<div class="button-row" flex layout="row" layout-align="start center">
+		<button md-raised-button color="primary" [disabled]="!selectedUser || selectedUser.role === null || showProgress" (click)="onSubmit()">SUBMIT</button>
 		<button md-button class="cancel-button" (click)="onCancel()">CANCEL</button>
 	</div>
 </div>

@@ -43,6 +43,15 @@ public class StatusDAO extends NamedParameterJdbcDaoSupport {
         return status;
     }
 
+    public List<Status> updateStatuses(List<Status> statuses) {
+        if (statuses.size() > 0) {
+            for(Status s : statuses) {
+                updateStatus(s);
+            }
+        }
+        return statuses;
+    }
+
     public Status updateStatus(Status status) {
         SqlParameterSource params = new BeanPropertySqlParameterSource(status);
         String sql = "UPDATE status SET description = :description, ordernum = :ordernum WHERE id = :id";

@@ -14,57 +14,49 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
-@RequestMapping("status")
-public class StatusController {
+@RequestMapping("attachment")
+public class AttachmentController {
 
     @Inject
-    @Named("StatusDAO")
-    private StatusDAO statusDAO;
+    @Named("AttachmentDAO")
+    private AttachmentDAO attachmentDAO;
 
     private @Autowired HttpServletRequest request;
 
-    @RequestMapping(method= RequestMethod.GET)
-    public @ResponseBody ResponseEntity<List<Status>> getStatuses() {
-        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) { //TODO are these the right roles??
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-        List<Status> statuses = statusDAO.getStatuses();
-        return new ResponseEntity<>(statuses, HttpStatus.OK);
-    }
-
     @RequestMapping(method=RequestMethod.GET, value="/{id}")
-    public @ResponseBody ResponseEntity<Status> getStatusById(@PathVariable String id) {
+    public @ResponseBody ResponseEntity<List<Attachment>> getAttachmentsByIssueId(@PathVariable String id) {
         if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        Status status = statusDAO.getStatusById(id);
-        return new ResponseEntity<>(status, HttpStatus.OK);
+        List<Attachment> attachments = attachmentDAO.getAttachmentsByIssueId(id);
+        return new ResponseEntity<>(attachments, HttpStatus.OK);
     }
 
     @RequestMapping(method= RequestMethod.PUT)
-    public @ResponseBody ResponseEntity<List<Status>> updateStatuses(@RequestBody List<Status> statuses){
+    public @ResponseBody ResponseEntity<List<Attachment>> updateAttachments(@RequestBody List<Attachment> attachments){
         if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        statuses = statusDAO.updateStatuses(statuses);
-        return new ResponseEntity<>(statuses, HttpStatus.OK);
+        attachments = attachmentDAO.updateAttachments(attachments);
+        return new ResponseEntity<>(attachments, HttpStatus.OK);
     }
 
     @RequestMapping(method=RequestMethod.POST)
-    public @ResponseBody ResponseEntity<Status> createSingleStatus(@RequestBody Status status){
+    public @ResponseBody ResponseEntity<List<Attachment>> createAttachments(@RequestBody List<Attachment> attachments){
+        // TODO this call is breaking Error: HTTP Status 500 - Request processing failed; nested exception is java.lang.IllegalArgumentException: Bean object must not be null
         if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        Status newStatus = statusDAO.createStatus(status);
-        return new ResponseEntity<>(newStatus, HttpStatus.OK);
+        List<Attachment> newAttachments = attachmentDAO.createAttachments(attachments);
+        return new ResponseEntity<>(newAttachments, HttpStatus.OK);
     }
 
     @RequestMapping(method=RequestMethod.DELETE, value="/{id}")
-    public @ResponseBody ResponseEntity<String> deleteStatus(@PathVariable String id){
+    public @ResponseBody ResponseEntity<String> deleteAttachment(@PathVariable String id){
         if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        id = statusDAO.deleteStatus(id);
+        id = attachmentDAO.deleteAttachment(id);
         return new ResponseEntity<>(id, HttpStatus.OK);
     }
 }

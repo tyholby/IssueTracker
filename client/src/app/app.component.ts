@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MTCUser } from 'mtc-modules';
 import { UserService } from './services/UserService/user.service';
+import { IssueService } from './services/IssueService/issue.service';
 
 @Component({
 	selector: 'app-root',
@@ -15,27 +16,29 @@ export class AppComponent implements OnInit {
 		showProgressBar: false,
 		animate: 'fromLeft'
 	};
+	username = '';
+	createIssueData = null;
 
-	constructor(private MTCUser: MTCUser, private userService: UserService){
+	constructor(private MTCUser: MTCUser, private userService: UserService, private issueService: IssueService){
 
 	}
 
 	ngOnInit() {
+		this.issueService.openCreateSideNav$.subscribe(() => {
+			this.createIssueData = this.userService.currentUser;
+		});
+		this.userService.currentLdsAccount$.subscribe(account => this.username = account.name);
 		this.MTCUser.getUser().subscribe((ldsAccount) => {
 			console.log('MTCUser.getUser()', ldsAccount);
-			this.userService.currentLdsAccount = ldsAccount;
+			this.userService.setCurrentLdsAccountSource(ldsAccount);
 			this.userService.getUser(ldsAccount.id).subscribe((userResponse) => {
-				this.userService.currentUser = userResponse.json();
+				this.userService.setCurrentUserSource(userResponse.json());
 			});
 		});
 	}
 
 	logout() {
 		MTCAuth.logout();
-		this.userService.currentLdsAccount = {};
-		this.userService.currentUser = {
-			role: null
-		};
 	}
 
 }

@@ -1,0 +1,63 @@
+<div class="create-issue" flex layout="column">
+	<div class="header" flex>Create New Issue</div>
+	<div class="edit-container" flex layout="column" *ngIf="issue !== null">
+		<i class="material-icons close-button" (click)="onClose.emit()">close</i>
+		<div class="subheader" flex layout="row" layout-align="start end">
+			<h5>ISSUE TITLE</h5>
+		</div>
+		<div class="input-row" flex layout="row" layout-align="start center">
+			<span flex="30">Title: </span>
+			<input flex="70" type="text" placeholder="Enter Issue Title" [(ngModel)]="issue.title">
+		</div>
+
+		<div class="subheader" flex layout="row" layout-align="start end">
+			<h5>PEOPLE</h5>
+		</div>
+		<div class="input-row" flex layout="row" layout-align="start center">
+			<span flex="30">Created By: </span>
+			<span flex="70">{{createdBy.fullName}}</span>
+		</div>
+		<div class="input-row" flex layout="row" layout-align="start center">
+			<span flex="30">Assigned To: </span>
+			<select class="assigned-to" [(ngModel)]="issue.assigneeid">
+				<option value="">Choose a User</option>
+				<option *ngFor="let user of users" [value]="user.ldsid">{{user.fullName}}</option>
+			</select>
+		</div>
+
+		<div class="subheader" flex layout="row" layout-align="start end">
+			<h5>DATES</h5>
+		</div>
+		<div class="input-row" flex layout="row" layout-align="start center">
+			<span flex="30">Due Date: </span>
+			<mtc-date-picker [initialDate]="issue.duedate" [title]="" (select)="issue.duedate = $event"></mtc-date-picker>
+		</div>
+
+		<div class="subheader" flex layout="row" layout-align="start end">
+			<h5>DESCRIPTION</h5>
+		</div>
+		<div class="input-row" flex layout="row" layout-align="start center">
+			<textarea rows="4" flex="100" placeholder="Add a description" [(ngModel)]="issue.description"></textarea>
+		</div>
+
+		<div class="subheader" flex layout="row" layout-align="start end">
+			<h5>ATTACHMENTS</h5>
+			<span flex></span>
+			<h5 class="add-attachments-button" (click)="onAddAttachmentClick()">+ ADD</h5>
+			<input type="file" id="input-file" style="display: none" (change)="onFileSelected($event)"/>
+		</div>
+		<div class="input-row" flex layout="column" layout-align="start center">
+			<div class="attachments-container" *ngFor="let attachment of attachments; let i = index" flex layout="row">
+				<span flex="60">{{attachment.filename}}</span>
+				<i class="material-icons remove-attachment-button" (click)="attachments.splice(i, 1)">close</i>
+				<span flex></span>
+			</div>
+		</div>
+
+		<md-progress-bar class="progress" mode="indeterminate" *ngIf="!issue || saving || fileUploading"></md-progress-bar>
+		<div class="button-row" flex layout="row" layout-align="center center">
+			<button md-raised-button color="primary" [disabled]="!issue.assigneeid || !issue.title || saving || fileUploading" (click)="onSubmit()">SUBMIT</button>
+			<button md-button class="cancel-button" (click)="onClose.emit()">CANCEL</button>
+		</div>
+	</div>
+</div>

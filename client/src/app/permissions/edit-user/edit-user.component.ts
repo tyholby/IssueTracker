@@ -23,7 +23,12 @@ export class EditUserComponent implements OnInit {
 	setRole(role) {
 		this.selectedUser.role = role;
 		this.updatedUser = true;
-		this.userService.updateUser(this.selectedUser).subscribe();
+		this.userService.updateUser(this.selectedUser).subscribe(u => {
+			if (this.userService.currentUser.ldsid === this.selectedUser.ldsid) {
+				this.userService.setCurrentUserSource(this.selectedUser);
+			}
+			else (this.userService.setCurrentUserSource(this.userService.currentUser))
+		});
 	}
 
 	onDelete() {

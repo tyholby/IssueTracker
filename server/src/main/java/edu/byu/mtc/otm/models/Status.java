@@ -5,7 +5,6 @@ public class Status {
     private String description;
     private String ordernum;
 
-
     public String getId() {
         return id;
     }

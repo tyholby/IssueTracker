@@ -8,16 +8,17 @@
 	</div>
 	<span flex="20">Issue Tracker</span>
 	<div flex></div>
-	<span *ngIf="user" flex="10" class="user-name" layout="row" layout-align="end">
-		{{userService.currentLdsAccount.name}}
+	<span flex="10" class="user-name" layout="row" layout-align="end">
+		{{username}}
 			<i class="material-icons"> arrow_drop_down </i>
 	</span>
 </md-toolbar>
 <div class="app-main" layout="column" flex>
 	<app-sidebar layout="row"></app-sidebar>
-	<div layout="column" flex class="main" id="main">
+	<div layout="row" flex="75" class="main" id="main">
 		<div class="content" layout="column" flex>
 			<router-outlet></router-outlet>
 		</div>
+		<app-create-issue flex="25" *ngIf="createIssueData" [createdBy]="createIssueData" (onClose)="createIssueData = null"></app-create-issue>
 	</div>
 </div>
