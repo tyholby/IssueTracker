@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MTCUser } from 'mtc-modules';
 import { UserService } from './services/UserService/user.service';
 import { IssueService } from './services/IssueService/issue.service';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-root',
@@ -17,15 +18,22 @@ export class AppComponent implements OnInit {
 		animate: 'fromLeft'
 	};
 	username = '';
+	searchText = '';
 	createIssueData = null;
+	viewIssueData = null;
 
-	constructor(private MTCUser: MTCUser, private userService: UserService, private issueService: IssueService){
+	constructor(private MTCUser: MTCUser, private userService: UserService, private issueService: IssueService, private router: Router){
 
 	}
 
 	ngOnInit() {
 		this.issueService.openCreateSideNav$.subscribe(() => {
 			this.createIssueData = this.userService.currentUser;
+			this.viewIssueData = null;
+		});
+		this.issueService.openViewSideNav$.subscribe(data => {
+			this.viewIssueData = data;
+			this.createIssueData = null;
 		});
 		this.userService.currentLdsAccount$.subscribe(account => this.username = account.name);
 		this.MTCUser.getUser().subscribe((ldsAccount) => {
@@ -33,8 +41,15 @@ export class AppComponent implements OnInit {
 			this.userService.setCurrentLdsAccountSource(ldsAccount);
 			this.userService.getUser(ldsAccount.id).subscribe((userResponse) => {
 				this.userService.setCurrentUserSource(userResponse.json());
+				if (!(this.userService.isAdmin() || this.userService.isUser())) {
+					this.router.navigate(['/unauth'])
+				}
 			});
 		});
+	}
+
+	filter() {
+		this.issueService.filter(this.searchText);
 	}
 
 	logout() {

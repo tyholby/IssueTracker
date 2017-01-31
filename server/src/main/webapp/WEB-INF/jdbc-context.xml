@@ -41,4 +41,7 @@
     <bean id="AttachmentDAO" class="edu.byu.mtc.otm.daos.AttachmentDAO">
         <property name="dataSource" ref="otm" />
     </bean>
+    <bean id="CommentDAO" class="edu.byu.mtc.otm.daos.CommentDAO">
+        <property name="dataSource" ref="otm" />
+    </bean>
 </beans>

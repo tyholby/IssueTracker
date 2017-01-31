@@ -7,17 +7,25 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO extends NamedParameterJdbcDaoSupport {
 
     public List<User> getUsers() {
         String query = "SELECT ldsid, role, fullname as fullName FROM users";
-        List<User> users = getNamedParameterJdbcTemplate().query(query, new BeanPropertyRowMapper<>(User.class));
+        List<User> users = new ArrayList<>();
+        users.add(unassignedUser());
+        for (User u : getNamedParameterJdbcTemplate().query(query, new BeanPropertyRowMapper<>(User.class))) {
+            users.add(u);
+        }
         return users;
     }
 
     public User getUserById(String ldsid) {
+        if (ldsid.equals("Unassigned")) {
+            return unassignedUser();
+        }
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("ldsid", ldsid);
         String sql = "SELECT ldsid, role, fullname as fullName FROM users WHERE ldsid = :ldsid";
@@ -50,5 +58,13 @@ public class UserDAO extends NamedParameterJdbcDaoSupport {
         String sql = "DELETE FROM users WHERE ldsid = :ldsid";
         getNamedParameterJdbcTemplate().update(sql, params);
         return ldsid;
+    }
+
+    public static User unassignedUser() {
+        User unassignedUser = new User();
+        unassignedUser.setLdsid("Unassigned");
+        unassignedUser.setFullName("Unassigned");
+        unassignedUser.setRole("admin");
+        return unassignedUser;
     }
 }

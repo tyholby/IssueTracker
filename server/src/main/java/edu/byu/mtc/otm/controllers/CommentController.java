@@ -14,62 +14,57 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
-@RequestMapping("status")
-public class StatusController {
+@RequestMapping("comment")
+public class CommentController {
 
     @Inject
-    @Named("StatusDAO")
-    private StatusDAO statusDAO;
+    @Named("CommentDAO")
+    private CommentDAO commentDAO;
+
+    @Inject
+    @Named("UserDAO")
+    private UserDAO userDAO;
 
     private @Autowired HttpServletRequest request;
 
-    @RequestMapping(method= RequestMethod.GET)
-    public @ResponseBody ResponseEntity<List<Status>> getStatuses() {
-//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
-        if (request.getUserPrincipal() == null) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-        List<Status> statuses = statusDAO.getStatuses();
-        return new ResponseEntity<>(statuses, HttpStatus.OK);
-    }
-
     @RequestMapping(method=RequestMethod.GET, value="/{id}")
-    public @ResponseBody ResponseEntity<Status> getStatusById(@PathVariable String id) {
+    public @ResponseBody ResponseEntity<List<Comment>> getCommentsByIssueId(@PathVariable String id) {
 //        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
         if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        Status status = statusDAO.getStatusById(id);
-        return new ResponseEntity<>(status, HttpStatus.OK);
+        List<Comment> comments = commentDAO.getCommentsByIssueId(id);
+        return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
     @RequestMapping(method= RequestMethod.PUT)
-    public @ResponseBody ResponseEntity<List<Status>> updateStatuses(@RequestBody List<Status> statuses){
+    public @ResponseBody ResponseEntity<Comment> updateComment(@RequestBody Comment comment){
 //        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
         if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        statuses = statusDAO.updateStatuses(statuses);
-        return new ResponseEntity<>(statuses, HttpStatus.OK);
+        comment = commentDAO.updateComment(comment);
+        return new ResponseEntity<>(comment, HttpStatus.OK);
     }
 
     @RequestMapping(method=RequestMethod.POST)
-    public @ResponseBody ResponseEntity<Status> createSingleStatus(@RequestBody Status status){
+    public @ResponseBody ResponseEntity<Comment> createComment(@RequestBody Comment comment){
 //        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
         if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        Status newStatus = statusDAO.createStatus(status);
-        return new ResponseEntity<>(newStatus, HttpStatus.OK);
+        Comment newComment = commentDAO.createComment(comment);
+        comment.setAuthorname(userDAO.getUserById(comment.getAuthorid()).getFullName());
+        return new ResponseEntity<>(newComment, HttpStatus.OK);
     }
 
     @RequestMapping(method=RequestMethod.DELETE, value="/{id}")
-    public @ResponseBody ResponseEntity<String> deleteStatus(@PathVariable String id){
+    public @ResponseBody ResponseEntity<String> deleteComment(@PathVariable String id){
 //        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
         if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        id = statusDAO.deleteStatus(id);
+        id = commentDAO.deleteComment(id);
         return new ResponseEntity<>(id, HttpStatus.OK);
     }
 }

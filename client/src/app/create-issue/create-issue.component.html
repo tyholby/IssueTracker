@@ -43,12 +43,12 @@
 		<div class="subheader" flex layout="row" layout-align="start end">
 			<h5>ATTACHMENTS</h5>
 			<span flex></span>
-			<h5 class="add-attachments-button" (click)="onAddAttachmentClick()">+ ADD</h5>
+			<h5 class="add-attachments-button" (click)="attachmentService.onAddAttachmentClick('input-file')">+ ADD</h5>
 			<input type="file" id="input-file" style="display: none" (change)="onFileSelected($event)"/>
 		</div>
 		<div class="input-row" flex layout="column" layout-align="start center">
 			<div class="attachments-container" *ngFor="let attachment of attachments; let i = index" flex layout="row">
-				<span flex="60">{{attachment.filename}}</span>
+				<span class="clickable" flex="60" (click)="attachmentService.openAttachment(attachment)">{{attachment.filename}}</span>
 				<i class="material-icons remove-attachment-button" (click)="attachments.splice(i, 1)">close</i>
 				<span flex></span>
 			</div>

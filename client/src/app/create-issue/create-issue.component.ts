@@ -42,10 +42,6 @@ export class CreateIssueComponent implements OnInit {
 		});
 	}
 
-	onAddAttachmentClick() {
-		document.getElementById('input-file').click();
-	}
-
 	onFileSelected(event) {
 		this.fileUploading = true;
 		let file = event.target.files[0];
@@ -80,13 +76,11 @@ export class CreateIssueComponent implements OnInit {
 		this.saving = true;
 		this.issueService.addIssue(this.issue).subscribe(issueResponse => {
 			const newIssue = issueResponse.json();
-			this.issueService.newIssueAdded(newIssue);
+			this.issueService.refreshIssues();
 			this.attachmentService.addAttachments(this.attachments.map(a => {
 				a.issueid = newIssue.id;
+				return a;
 			})).subscribe(attachmentsResponse => {
-				console.log('attachmentsResponse', attachmentsResponse.json())
-				//TODO the addAttachments call is breaking.
-				//TODO When clicking on the saved file, it should download to my computer.
 				this.saving = false;
 				this.onClose.emit();
 			});

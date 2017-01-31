@@ -7,7 +7,12 @@
 		<img src="../assets/images/mtclogo.svg" alt="logo">
 	</div>
 	<span flex="20">Issue Tracker</span>
-	<div flex></div>
+	<div flex class="app-search-container" layout="row">
+		<input type="text" [(ngModel)]="searchText" class="search-bar">
+		<div class="search-button" (click)="filter()">
+			<i class="material-icons search-icon"> search </i>
+		</div>
+	</div>
 	<span flex="10" class="user-name" layout="row" layout-align="end">
 		{{username}}
 			<i class="material-icons"> arrow_drop_down </i>
@@ -20,5 +25,6 @@
 			<router-outlet></router-outlet>
 		</div>
 		<app-create-issue flex="25" *ngIf="createIssueData" [createdBy]="createIssueData" (onClose)="createIssueData = null"></app-create-issue>
+		<app-view-issue flex="25" *ngIf="viewIssueData" [data]="viewIssueData" (onClose)="viewIssueData = null"></app-view-issue>
 	</div>
 </div>

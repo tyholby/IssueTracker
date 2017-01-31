@@ -5,6 +5,7 @@ import { NewUserComponent } from './new-user/new-user.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { StatusService } from '../services/StatusService/status.service';
 import { NewStatusComponent } from './new-status/new-status.component';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-permissions',
@@ -17,7 +18,7 @@ export class PermissionsComponent implements OnInit {
 	statuses: Array<any>;
 	editStatuses: boolean;
 
-	constructor(private userService: UserService, private statusService: StatusService, private dialogService: MTCDialogService) {
+	constructor(private userService: UserService, private statusService: StatusService, private dialogService: MTCDialogService, private router: Router) {
 		this.admins = [];
 		this.users = [];
 		this.statuses = [];
@@ -25,6 +26,9 @@ export class PermissionsComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		if (this.userService.userLoaded() && !(this.userService.isAdmin() || this.userService.isUser())) {
+			this.router.navigate(['/unauth'])
+		}
 		this.userService.currentUser$.subscribe(user => {
 			this.resetUsers();
 			this.resetStatuses();
@@ -50,7 +54,6 @@ export class PermissionsComponent implements OnInit {
 	resetStatuses() {
 		this.statusService.getStatuses().subscribe((statusesResponse) => {
 			this.statuses = statusesResponse.json();
-			console.log('statuses', this.statuses)
 		});
 	}
 

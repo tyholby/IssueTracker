@@ -1,0 +1,92 @@
+<div class="view-issue" flex layout="column">
+	<div class="header" flex>{{issueDetails ? issueDetails.title : ''}}</div>
+	<md-progress-bar class="progress" mode="indeterminate" *ngIf="!issueDetails"></md-progress-bar>
+	<div class="view-container" flex layout="column" *ngIf="issueDetails">
+		<i class="material-icons close-button" (click)="onClose.emit()">close</i>
+		<div class="subheader" flex layout="row" layout-align="start end">
+			<h5>DETAILS</h5>
+		</div>
+		<div class="input-row" flex layout="row" layout-align="start center" *ngIf="editCopy">
+			<span flex="30">Title: </span>
+			<input flex="70" type="text" placeholder="Enter Issue Title" [(ngModel)]="editCopy.title">
+		</div>
+		<div class="input-row" flex layout="row" layout-align="start center">
+			<span flex="30">Status: </span>
+			<span flex="70" *ngIf="!editCopy">{{issueDetails.status.description}}</span>
+			<select *ngIf="editCopy" [(ngModel)]="editCopy.statusid">
+				<option *ngFor="let status of statuses"
+						[value]="status.id">{{status.description}}</option>
+			</select>
+		</div>
+
+		<div class="subheader" flex layout="row" layout-align="start end">
+			<h5>PEOPLE</h5>
+		</div>
+		<div class="input-row" flex layout="row" layout-align="start center">
+			<span flex="30">Created By: </span>
+			<span flex="70">{{issueDetails.createdBy.fullName}}</span>
+		</div>
+		<div class="input-row" flex layout="row" layout-align="start center">
+			<span flex="30">Assignee: </span>
+			<span flex="70" *ngIf="!editCopy">{{issueDetails.assignee.fullName}}</span>
+			<select *ngIf="editCopy" [(ngModel)]="editCopy.assigneeid">
+				<option *ngFor="let user of users"
+						[value]="user.ldsid">{{user.fullName}}</option>
+			</select>
+		</div>
+
+		<div class="subheader" flex layout="row" layout-align="start end">
+			<h5>DATES</h5>
+		</div>
+		<div class="input-row" flex layout="row" layout-align="start center">
+			<span flex="30">Due Date: </span>
+			<span flex="70">{{issueDetails.duedate | date:'longDate'}}</span>
+		</div>
+
+		<div class="subheader" flex layout="row" layout-align="start end">
+			<h5>DESCRIPTION</h5>
+		</div>
+		<div class="input-row" flex layout="row" layout-align="start center">
+			<span flex="100" *ngIf="!editCopy">{{issueDetails.description}}</span>
+			<textarea rows="4" flex="100" placeholder="Add a description" [(ngModel)]="editCopy.description" *ngIf="editCopy"></textarea>
+		</div>
+
+		<div class="subheader" flex layout="row" layout-align="start end">
+			<h5>ATTACHMENTS</h5>
+			<span flex></span>
+			<h5 class="add-attachments-button" (click)="attachmentService.onAddAttachmentClick('input-file-issue-details')" *ngIf="editCopy">+ ADD</h5>
+			<input type="file" id="input-file-issue-details" style="display: none" (change)="onFileSelected($event)"/>
+		</div>
+		<div class="input-row" flex layout="column" layout-align="start center">
+			<div class="attachments-container" *ngFor="let attachment of issueDetails.attachments; let i = index" flex layout="row">
+				<span class="clickable" flex="60" (click)="attachmentService.openAttachment(attachment)">{{attachment.filename}}</span>
+				<i class="material-icons remove-attachment-button" *ngIf="editCopy" (click)="onRemoveAttachment(attachment, i)">close</i>
+				<span flex></span>
+			</div>
+		</div>
+
+		<div class="subheader" flex layout="row" layout-align="start end">
+			<h5>ACTIONS</h5>
+		</div>
+		<div class="input-row" flex layout="row" layout-align="center">
+			<div class="add-button" (click)="editCopy ? onSaveEdit() : onEdit()">{{editCopy ? 'SAVE' : 'EDIT'}}</div>
+			<div class="delete-button" (click)="onDeleteIssue()">DELETE</div>
+		</div>
+
+		<div class="subheader" flex layout="row" layout-align="start end">
+			<h5>COMMENTS</h5>
+		</div>
+		<div class="input-row" flex layout="row" layout-align="start center">
+			<textarea rows="4" flex="80" placeholder="Add a comment" [(ngModel)]="newComment"></textarea>
+			<div class="add-button" (click)="onNewCommentSubmit()">SUBMIT</div>
+		</div>
+		<div class="input-row" flex layout="column" layout-align="start" *ngFor="let comment of issueDetails.comments">
+			<div class="comment-header" layout="row">
+				<img src="{{'https://api.mtc.byu.edu/user/v1/users/' + comment.authorid}}" width="15" height="15">
+				<span class="author-name">{{comment.authorname}}</span>
+				<span class="comment-timestamp">{{comment.timestamp | date:'longDate'}} {{comment.timestamp | date:'shortTime'}}</span>
+			</div>
+			<span>{{comment.text}}</span>
+		</div>
+	</div>
+</div>

@@ -25,7 +25,8 @@ public class AttachmentController {
 
     @RequestMapping(method=RequestMethod.GET, value="/{id}")
     public @ResponseBody ResponseEntity<List<Attachment>> getAttachmentsByIssueId(@PathVariable String id) {
-        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         List<Attachment> attachments = attachmentDAO.getAttachmentsByIssueId(id);
@@ -34,7 +35,8 @@ public class AttachmentController {
 
     @RequestMapping(method= RequestMethod.PUT)
     public @ResponseBody ResponseEntity<List<Attachment>> updateAttachments(@RequestBody List<Attachment> attachments){
-        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         attachments = attachmentDAO.updateAttachments(attachments);
@@ -43,8 +45,8 @@ public class AttachmentController {
 
     @RequestMapping(method=RequestMethod.POST)
     public @ResponseBody ResponseEntity<List<Attachment>> createAttachments(@RequestBody List<Attachment> attachments){
-        // TODO this call is breaking Error: HTTP Status 500 - Request processing failed; nested exception is java.lang.IllegalArgumentException: Bean object must not be null
-        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         List<Attachment> newAttachments = attachmentDAO.createAttachments(attachments);
@@ -53,7 +55,8 @@ public class AttachmentController {
 
     @RequestMapping(method=RequestMethod.DELETE, value="/{id}")
     public @ResponseBody ResponseEntity<String> deleteAttachment(@PathVariable String id){
-        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         id = attachmentDAO.deleteAttachment(id);

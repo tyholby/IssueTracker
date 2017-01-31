@@ -21,6 +21,9 @@ import { NewStatusComponent } from './permissions/new-status/new-status.componen
 import { IssueService } from './services/IssueService/issue.service';
 import { CreateIssueComponent } from './create-issue/create-issue.component';
 import { AttachmentService } from './services/AttachmentService/attachment.service';
+import { UnauthComponent } from './unauth/unauth.component';
+import { ViewIssueComponent } from './view-issue/view-issue.component';
+import { CommentService } from './services/CommentService/comment.service';
 
 @NgModule({
 	declarations: [
@@ -31,6 +34,8 @@ import { AttachmentService } from './services/AttachmentService/attachment.servi
 		EditUserComponent,
 		NewStatusComponent,
 		CreateIssueComponent,
+		UnauthComponent,
+		ViewIssueComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -48,7 +53,8 @@ import { AttachmentService } from './services/AttachmentService/attachment.servi
 		UserService,
 		StatusService,
 		AttachmentService,
-		IssueService
+		IssueService,
+		CommentService,
 	],
 	bootstrap: [AppComponent],
 	entryComponents: [

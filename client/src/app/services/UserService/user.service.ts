@@ -36,8 +36,14 @@ export class UserService {
 		return this.http.put(`${this.hostname.travelUrl}user/`, JSON.stringify(user));
 	}
 
-	isAdmin(user) {
+	userLoaded() {
+		return !!this.currentUser.ldsid;
+	}
+	isAdmin(user = this.currentUser) {
 		return user.role === 'admin';
+	}
+	isUser(user = this.currentUser) {
+		return user.role === 'user';
 	}
 	searchUsers(name) {
 		return this.http.get(`https://api.mtc.byu.edu/user/v1/users?search=${name}`);

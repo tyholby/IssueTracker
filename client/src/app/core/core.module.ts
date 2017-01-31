@@ -13,13 +13,6 @@ import {
 	WindowRefService,
 	HostnameService,
 } from './services';
-
-import {
-	MissingInfoPipe,
-	TelephonePipe,
-	MomentPipe
-} from './pipes';
-
 let dialogComponents = [
 ];
 
@@ -29,12 +22,6 @@ let components = [
 ];
 
 let directives = [
-];
-
-let pipes = [
-	MissingInfoPipe,
-	TelephonePipe,
-	MomentPipe
 ];
 
 let services = [
@@ -52,10 +39,10 @@ let modules = [
 ];
 
 @NgModule({
-	declarations: [ components, directives, pipes ],
+	declarations: [ components, directives ],
 	imports: modules,
-	providers: [ services, pipes ],
-	exports: [ components, directives, pipes ],
+	providers: [ services ],
+	exports: [ components, directives ],
 	entryComponents: dialogComponents
 })
 export class CoreModule {

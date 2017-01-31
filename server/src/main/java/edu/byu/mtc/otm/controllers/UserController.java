@@ -31,11 +31,16 @@ public class UserController {
     @Named("UserDAO")
     private UserDAO userDAO;
 
+    @Inject
+    @Named("IssueDAO")
+    private IssueDAO issueDAO;
+
     private @Autowired HttpServletRequest request;
 
     @RequestMapping(method= RequestMethod.GET)
     public @ResponseBody ResponseEntity<List<User>> getUsers() {
-        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) { //TODO are these the right roles??
+//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         List<User> users = userDAO.getUsers();
@@ -44,7 +49,8 @@ public class UserController {
 
     @RequestMapping(method=RequestMethod.GET, value="/{id}")
     public @ResponseBody ResponseEntity<User> getUserById(@PathVariable String id) {
-        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         User user = userDAO.getUserById(id);
@@ -53,7 +59,8 @@ public class UserController {
 
     @RequestMapping(method= RequestMethod.PUT)
     public @ResponseBody ResponseEntity<User> updateUser(@RequestBody User user){
-        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         user = userDAO.updateUser(user);
@@ -62,7 +69,8 @@ public class UserController {
 
     @RequestMapping(method=RequestMethod.POST)
     public @ResponseBody ResponseEntity<User> createSingleUser(@RequestBody User user){
-        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         User newUser = userDAO.createUser(user);
@@ -71,10 +79,16 @@ public class UserController {
 
     @RequestMapping(method=RequestMethod.DELETE, value="/{id}")
     public @ResponseBody ResponseEntity<String> deleteUser(@PathVariable String id){
-        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         id = userDAO.deleteUser(id);
+        List<Issue> issues = issueDAO.getIssuesForUser(id);
+        for (Issue i : issues) {
+            i.setAssigneeid("Unassigned");
+            issueDAO.updateIssue(i);
+        }
         return new ResponseEntity<>(id, HttpStatus.OK);
     }
 }

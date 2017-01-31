@@ -18,7 +18,14 @@ public class IssueDAO extends NamedParameterJdbcDaoSupport {
                 "ON iss.statusid = sta.id " +
                 "INNER JOIN users us " +
                 "ON us.ldsid = iss.assigneeid";
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("unassignedId", "Unassigned");
+        String query2 = "SELECT id, title, description, duedate, assigneeid, statusid, createdbyid FROM issue WHERE assigneeid = :unassignedId";
         List<Issue> issues = getNamedParameterJdbcTemplate().query(query, new BeanPropertyRowMapper<>(Issue.class));
+        List<Issue> unassignedIssues = getNamedParameterJdbcTemplate().query(query2, params, new BeanPropertyRowMapper<>(Issue.class));
+        for (Issue ui : unassignedIssues) {
+            issues.add(ui);
+        }
         return issues;
     }
 
@@ -70,5 +77,13 @@ public class IssueDAO extends NamedParameterJdbcDaoSupport {
         String sql = "DELETE FROM issue WHERE id = :id";
         getNamedParameterJdbcTemplate().update(sql, params);
         return id;
+    }
+
+    public List<Issue> getIssuesForUser(String id) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("id", id);
+        String query = "SELECT id, title, description, duedate, assigneeid, statusid, createdbyid FROM issue WHERE assigneeid = :id";
+        List<Issue> issues = getNamedParameterJdbcTemplate().query(query, params, new BeanPropertyRowMapper<>(Issue.class));
+        return issues;
     }
 }

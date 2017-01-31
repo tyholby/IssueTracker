@@ -14,18 +14,23 @@
 					{{user.fullName}}
 				</div>
 				<div class="issues-container" flex layout="row" *ngIf="user.expanded">
-					<div class="issue-column" dnd-droppable (onDropSuccess)="onDropSuccess($event.dragData, status.id, user)"
+					<div class="issue-column" dnd-droppable
+						 (onDropSuccess)="onDropSuccess($event.dragData, status.id, user)"
 						 [class.droppable]="allowDropFunction(user.ldsid, status.id)(dragging)"
 						 [allowDrop]="allowDropFunction(user.ldsid, status.id)"
 						 flex layout="column" *ngFor="let status of statuses">
-						<div class="issue-cell" dnd-draggable [dragEnabled]="true" [dragData]="issue"
-							 (onDragStart)="onDragStart($event)" (onDragEnd)="onDragEnd($event)"
-							 flex layout="row" *ngFor="let issue of user.issues[status.id]">
-							<img class="user-avatar" src="{{'https://api.mtc.byu.edu/user/v1/users/' + user.ldsid}}"
-								 alt="User Photo" width="38" height="38">
-							<div class="issue-info" flex layout="column">
-								<span class="issue-title">{{issue.title}}</span>
-								<span class="issue-date">{{issue.duedate | date:'longDate'}}</span>
+						<div flex layout="row" *ngFor="let issue of user.issues[status.id]">
+							<div *ngIf="filter(issue)" flex layout="row"
+								 (click)="issueService.openViewSideNav(issue)"
+								 class="issue-cell" dnd-draggable
+								 [dragEnabled]="true" [dragData]="issue"
+								 (onDragStart)="onDragStart($event)" (onDragEnd)="onDragEnd($event)">
+								<img class="user-avatar" src="{{'https://api.mtc.byu.edu/user/v1/users/' + user.ldsid}}"
+									 alt="User Photo" width="38" height="38">
+								<div class="issue-info" flex layout="column">
+									<span class="issue-title">{{issue.title}}</span>
+									<span class="issue-date">{{issue.duedate | date:'longDate'}}</span>
+								</div>
 							</div>
 						</div>
 					</div>

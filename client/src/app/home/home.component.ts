@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/UserService/user.service';
 import { StatusService } from '../services/StatusService/status.service';
 import { IssueService } from '../services/IssueService/issue.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -13,14 +14,22 @@ export class HomeComponent implements OnInit {
 	users = [];
 	issuesLoaded = false;
 	dragging: any = null;
+	searchText: string = '';
 
 	constructor(private userService: UserService,
 				private statusService: StatusService,
-				private issueService: IssueService) {
+				private issueService: IssueService,
+				private router: Router) {
+		this.issueService.filter$.subscribe(searchText => {
+			this.searchText = searchText;
+		});
 	}
 
 	ngOnInit() {
-		this.issueService.newIssueAdded$.subscribe(issue => {
+		if (this.userService.userLoaded() && !(this.userService.isAdmin() || this.userService.isUser())) {
+			this.router.navigate(['/unauth'])
+		}
+		this.issueService.refreshIssues$.subscribe(issue => {
 			this.resetIssues();
 		});
 		this.userService.currentUser$.subscribe(user => {
@@ -51,16 +60,34 @@ export class HomeComponent implements OnInit {
 	resetIssues() {
 		this.issuesLoaded = false;
 		this.issueService.getIssues().subscribe(issuesResponse => {
+			let issues = issuesResponse.json().map(i => {
+				const filtered = this.users.filter(u => u.ldsid === i.assigneeid);
+				let assignee = {
+					fullName: ''
+				};
+				if (filtered.length > 0) {
+					assignee = filtered[0];
+				}
+				i.assigneeName = assignee.fullName;
+				return i;
+			});
 			this.users.forEach(user => {
+				console.log('user', user)
 				user.issues = {};
-				issuesResponse.json().forEach(issue => {
+				issues.forEach(issue => {
 					if (user.ldsid === issue.assigneeid) {
 						this.addIssueByStatus(user.issues, issue, issue.statusid);
 					}
 				});
 			});
 			this.issuesLoaded = true;
+			console.log('issues', this.users)
 		});
+	}
+
+	filter(issue) {
+		const lowercased = this.searchText.toLowerCase();
+		return this.searchText === '' || issue.title.toLowerCase().includes(lowercased) || issue.assigneeName.toLowerCase().includes(lowercased)
 	}
 
 	addIssueByStatus(issuesObject, issue, toStatusId) {

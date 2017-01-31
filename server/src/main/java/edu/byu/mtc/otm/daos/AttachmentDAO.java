@@ -12,11 +12,11 @@ import java.util.List;
 
 public class AttachmentDAO extends NamedParameterJdbcDaoSupport {
 
-    public List<Attachment> getAttachmentsByIssueId(String id) {
+    public List<Attachment> getAttachmentsByIssueId(String issueid) {
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("id", id);
-        String query = "SELECT id, url, issueid, attacheddate, filename FROM attachments WHERE issueid = :id";
-        List<Attachment> attachments = getNamedParameterJdbcTemplate().query(query, new BeanPropertyRowMapper<>(Attachment.class));
+        params.addValue("issueid", issueid);
+        String query = "SELECT id, url, issueid, attacheddate, filename FROM attachments WHERE issueid = :issueid";
+        List<Attachment> attachments = getNamedParameterJdbcTemplate().query(query, params, new BeanPropertyRowMapper<>(Attachment.class));
         return attachments;
     }
 

@@ -19,4 +19,14 @@ export class AttachmentService {
 	updateAttachments(attachments) {
 		return this.http.put(`${this.hostname.travelUrl}attachment/`, JSON.stringify(attachments));
 	}
+
+	onAddAttachmentClick(elId) {
+		document.getElementById(elId).click();
+	}
+
+	openAttachment(attachment) {
+		const win = window.open(attachment.url, '_blank');
+		win.focus();
+		// TODO When clicking on the saved file, it should download to my computer??
+	}
 }
