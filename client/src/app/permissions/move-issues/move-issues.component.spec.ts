@@ -3,21 +3,21 @@
 // import { By } from '@angular/platform-browser';
 // import { DebugElement } from '@angular/core';
 //
-// import { CreateIssueComponent } from './create-issue.component';
+// import { MoveIssuesComponent } from './move-issues.component';
 //
-// describe('CreateIssueComponent', () => {
-// 	let component: CreateIssueComponent;
-// 	let fixture: ComponentFixture<CreateIssueComponent>;
+// describe('MoveIssuesComponent', () => {
+// 	let component: MoveIssuesComponent;
+// 	let fixture: ComponentFixture<MoveIssuesComponent>;
 //
 // 	beforeEach(async(() => {
 // 		TestBed.configureTestingModule({
-// 			declarations: [CreateIssueComponent]
+// 			declarations: [MoveIssuesComponent]
 // 		})
 // 			.compileComponents();
 // 	}));
 //
 // 	beforeEach(() => {
-// 		fixture = TestBed.createComponent(CreateIssueComponent);
+// 		fixture = TestBed.createComponent(MoveIssuesComponent);
 // 		component = fixture.componentInstance;
 // 		fixture.detectChanges();
 // 	});

@@ -1,6 +1,7 @@
 package edu.byu.mtc.otm.daos;
 
 import edu.byu.mtc.otm.models.Issue;
+import edu.byu.mtc.otm.models.MoveStatusInstruction;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -26,6 +27,14 @@ public class IssueDAO extends NamedParameterJdbcDaoSupport {
         for (Issue ui : unassignedIssues) {
             issues.add(ui);
         }
+        return issues;
+    }
+
+    public List<Issue> getIssuesByStatus(String id) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("id", id);
+        String sql = "SELECT id, title, description, duedate, assigneeid, statusid, createdbyid FROM issue WHERE statusid = :id";
+        List<Issue> issues = getNamedParameterJdbcTemplate().query(sql, params, new BeanPropertyRowMapper<>(Issue.class));
         return issues;
     }
 
@@ -85,5 +94,17 @@ public class IssueDAO extends NamedParameterJdbcDaoSupport {
         String query = "SELECT id, title, description, duedate, assigneeid, statusid, createdbyid FROM issue WHERE assigneeid = :id";
         List<Issue> issues = getNamedParameterJdbcTemplate().query(query, params, new BeanPropertyRowMapper<>(Issue.class));
         return issues;
+    }
+
+    public void moveIssuesToStatus(MoveStatusInstruction moveStatusInstruction) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("id", moveStatusInstruction.getId());
+        params.addValue("moveto", moveStatusInstruction.getMoveto());
+        String query = "SELECT id, title, description, duedate, assigneeid, statusid, createdbyid FROM issue WHERE statusid = :id";
+        List<Issue> issues = getNamedParameterJdbcTemplate().query(query, params, new BeanPropertyRowMapper<>(Issue.class));
+        for (Issue i : issues) {
+            i.setStatusid(moveStatusInstruction.getMoveto());
+            updateIssue(i);
+        }
     }
 }

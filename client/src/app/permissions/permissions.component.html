@@ -32,12 +32,17 @@
 			<div class="subheader" flex layout="row" layout-align="start end">
 				<h5>SWIMLANES</h5>
 			</div>
-			<div class="statuses-container" flex layout="column" dnd-sortable-container [sortableData]="statuses">
+			<div class="statuses-container" flex layout="column" dnd-sortable-container [sortableData]="statuses" *ngIf="userService.isAdmin()">
 				<div class="status-row" flex dnd-sortable [sortableIndex]="i" (dragend)="fixStatusOrders()"
 					 *ngFor="let status of statuses; let i = index" layout="row" layout-align="start center">
 					<input class="edit-status-name" *ngIf="editStatuses" type="text" flex placeholder="status name" [(ngModel)]="status.description" (keyup)="status.edited = true">
 					<span  flex *ngIf="!editStatuses">{{status.description}}</span>
-					<i class="material-icons edit-button" *ngIf="userService.isAdmin(userService.currentUser)" (click)="onDeleteStatus(status, i)"> close </i>
+					<i class="material-icons edit-button" (click)="onDeleteStatus(status)"> close </i>
+				</div>
+			</div>
+			<div class="statuses-container" flex layout="column" dnd-sortable-container [sortableData]="statuses" *ngIf="userService.isUser()">
+				<div class="status-row" flex *ngFor="let status of statuses" layout="row" layout-align="start center">
+					<span flex>{{status.description}}</span>
 				</div>
 			</div>
 		</div>

@@ -72,7 +72,6 @@ export class HomeComponent implements OnInit {
 				return i;
 			});
 			this.users.forEach(user => {
-				console.log('user', user)
 				user.issues = {};
 				issues.forEach(issue => {
 					if (user.ldsid === issue.assigneeid) {
@@ -81,7 +80,6 @@ export class HomeComponent implements OnInit {
 				});
 			});
 			this.issuesLoaded = true;
-			console.log('issues', this.users)
 		});
 	}
 

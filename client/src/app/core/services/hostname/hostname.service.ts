@@ -4,46 +4,51 @@ import { WindowRefService } from '../window-ref';
 @Injectable()
 export class HostnameService {
 	_url:string = 'http://localhost:8080/';
-	env:string = 'dev';
+	_env:string = 'dev';
 
 	constructor(private windowRefService: WindowRefService) {
+		this.init();
+	}
+
+	init() {
 		let url = '';
 		let env = '';
 		let win = this.windowRefService.getWindow();
-		if (~win.location.hostname.indexOf('cdn.mtc.byu.edu') ||
-				win.location.hostname === 'apps.mtc.byu.edu') {
-			url = 'https://app.mtc.byu.edu/';
-			env = '';
-		} else if (~win.location.hostname.indexOf('support-apps.mtc.byu.edu')) {
-			url = 'https://supportapplications.mtc.byu.edu/';
-			env = 'support';
-		} else if (~win.location.hostname.indexOf('test-apps.mtc.byu.edu')) {
-			url = 'https://testapplications.mtc.byu.edu/';
-			env = 'test';
-		} else if (~win.location.hostname.indexOf('stage-apps.mtc.byu.edu')) {
-			url = 'https://stageapplications.mtc.byu.edu/';
-			env = 'stage';
-		} else if (~win.location.hostname.indexOf('beta-apps.mtc.byu.edu')) {
-			url = 'https://betaapplications.mtc.byu.edu/';
-			env = 'beta';
-		} else if (~win.location.hostname.indexOf('dev-apps.mtc.byu.edu')) {
-			url = 'https://devapplications.mtc.byu.edu/';
-			env = 'dev';
+		if (win.location.hostname.includes('support-apps.mtc.byu.edu')) {
+			this.url = 'https://supportapplications.mtc.byu.edu/';
+			this.env = 'support';
+		} else if (win.location.hostname.includes('test-apps.mtc.byu.edu')) {
+			this.url = 'https://testapplications.mtc.byu.edu/';
+			this.env = 'test';
+		} else if (win.location.hostname.includes('stage-apps.mtc.byu.edu')) {
+			this.url = 'https://stageapplications.mtc.byu.edu/';
+			this.env = 'stage';
+		} else if (win.location.hostname.includes('beta-apps.mtc.byu.edu')) {
+			this.url = 'https://betaapplications.mtc.byu.edu/';
+			this.env = 'beta';
+		} else if (win.location.hostname.includes('dev-apps.mtc.byu.edu')) {
+			this.url = 'https://devapplications.mtc.byu.edu/';
+			this.env = 'dev';
+		} else if (win.location.hostname.includes('cdn.mtc.byu.edu') ||
+			win.location.hostname.includes('apps.mtc.byu.edu')) {
+			this.url = 'https://app.mtc.byu.edu/';
+			this.env = '';
 		} else {
-			url = 'http://localhost:8080/';
-			env = 'dev';
+			this.url = 'http://localhost:8080/';
+			this.env = 'dev';
 		}
-
-		this.setUrl(url);
-		this.setEnv(env);
 	}
 
-	setUrl(value) {
+	set url(value) {
 		this._url = value;
 	}
 
-	setEnv(value) {
-		this.env = value;
+	set env(value) {
+		this._env = value;
+	}
+
+	get env() {
+		return this._env === '' ? 'prod' : this._env;
 	}
 
 	get url(){
@@ -55,7 +60,7 @@ export class HostnameService {
 	}
 
 	get missionarySystemsUrl(){
-		return `${this._url}missionarysystems${this.env}/v1/`;
+		return `${this._url}missionarysystems${this._env}/v1/`;
 	}
 
 }

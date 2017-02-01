@@ -9,6 +9,15 @@
 			<span flex="30">Title: </span>
 			<input flex="70" type="text" placeholder="Enter Issue Title" [(ngModel)]="issue.title">
 		</div>
+		<div class="input-row" flex layout="row" layout-align="start center">
+			<span flex="30">Status: </span>
+			<select [(ngModel)]="issue.statusid">
+				<option value="">Choose a Status</option>
+				<option *ngFor="let status of statuses"
+						[value]="status.id">{{status.description}}
+				</option>
+			</select>
+		</div>
 
 		<div class="subheader" flex layout="row" layout-align="start end">
 			<h5>PEOPLE</h5>
@@ -30,7 +39,8 @@
 		</div>
 		<div class="input-row" flex layout="row" layout-align="start center">
 			<span flex="30">Due Date: </span>
-			<mtc-date-picker [initialDate]="issue.duedate" [title]="" (select)="issue.duedate = $event"></mtc-date-picker>
+			<mtc-date-picker [initialDate]="issue.duedate" [title]=""
+							 (select)="issue.duedate = $event"></mtc-date-picker>
 		</div>
 
 		<div class="subheader" flex layout="row" layout-align="start end">
@@ -54,9 +64,12 @@
 			</div>
 		</div>
 
-		<md-progress-bar class="progress" mode="indeterminate" *ngIf="!issue || saving || fileUploading"></md-progress-bar>
+		<md-progress-bar class="progress" mode="indeterminate" *ngIf="!issue || saving || loading"></md-progress-bar>
 		<div class="button-row" flex layout="row" layout-align="center center">
-			<button md-raised-button color="primary" [disabled]="!issue.assigneeid || !issue.title || saving || fileUploading" (click)="onSubmit()">SUBMIT</button>
+			<button md-raised-button color="primary"
+					[disabled]="!issue.assigneeid || !issue.title || !issue.statusid || saving || loading"
+					(click)="onSubmit()">SUBMIT
+			</button>
 			<button md-button class="cancel-button" (click)="onClose.emit()">CANCEL</button>
 		</div>
 	</div>

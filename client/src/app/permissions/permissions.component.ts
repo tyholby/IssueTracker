@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/UserService/user.service';
-import { MTCDialogService, SimpleConfirmationComponent } from 'mtc-modules';
+import { MTCDialogService } from 'mtc-modules';
 import { NewUserComponent } from './new-user/new-user.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { StatusService } from '../services/StatusService/status.service';
 import { NewStatusComponent } from './new-status/new-status.component';
 import { Router } from '@angular/router';
+import { MoveIssuesComponent } from './move-issues/move-issues.component';
+import { NotificationsService } from 'angular2-notifications';
 
 @Component({
 	selector: 'app-permissions',
@@ -18,7 +20,8 @@ export class PermissionsComponent implements OnInit {
 	statuses: Array<any>;
 	editStatuses: boolean;
 
-	constructor(private userService: UserService, private statusService: StatusService, private dialogService: MTCDialogService, private router: Router) {
+	constructor(private userService: UserService, private statusService: StatusService,
+				private dialogService: MTCDialogService, private router: Router, private notificationsService: NotificationsService) {
 		this.admins = [];
 		this.users = [];
 		this.statuses = [];
@@ -42,7 +45,7 @@ export class PermissionsComponent implements OnInit {
 		if (currentUser.role !== null) {
 			this.userService.getUsers().subscribe((usersResponse) => {
 				this.admins = usersResponse.json().filter(u => {
-					return u.role === 'admin';
+					return u.role === 'admin' && u.ldsid !== 'Unassigned';
 				});
 				this.users = usersResponse.json().filter(u => {
 					return u.role === 'user';
@@ -92,12 +95,20 @@ export class PermissionsComponent implements OnInit {
 		});
 	}
 
-	onDeleteStatus(status, i) {
-		this.dialogService.show(SimpleConfirmationComponent, 350, 200).subscribe(deletedStatus => {
-			if (deletedStatus) {
-				this.statusService.deleteStatus(status.id).subscribe(response => {
-					this.statuses.splice(i, 1);
-					this.fixStatusOrders();
+	onDeleteStatus(status) {
+		if (this.statuses.length <= 1) {
+			this.notificationsService.error('Error', 'Cannot delete the only status left');
+			return;
+		}
+		const config = {
+			id: status.id,
+			statuses: this.statuses
+		};
+		this.dialogService.show(MoveIssuesComponent, 350, 200, config).subscribe(moveto => {
+			if (moveto !== null) {
+				const { id } = status;
+				this.statusService.moveStatusIssues({ id, moveto }).subscribe(response => {
+					this.resetStatuses();
 				});
 			}
 		});

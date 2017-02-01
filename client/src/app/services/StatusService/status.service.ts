@@ -22,4 +22,10 @@ export class StatusService {
 	updateStatuses(statuses) {
 		return this.http.put(`${this.hostname.travelUrl}status/`, JSON.stringify(statuses));
 	}
+	moveStatusIssues(moveToInstruction) {
+		if (moveToInstruction.moveto === '') {
+			return this.deleteStatus(moveToInstruction.id);
+		}
+		return this.http.put(`${this.hostname.travelUrl}status/move`, JSON.stringify(moveToInstruction));
+	}
 }

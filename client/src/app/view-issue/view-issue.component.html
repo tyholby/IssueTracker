@@ -40,7 +40,9 @@
 		</div>
 		<div class="input-row" flex layout="row" layout-align="start center">
 			<span flex="30">Due Date: </span>
-			<span flex="70">{{issueDetails.duedate | date:'longDate'}}</span>
+			<span flex="70" *ngIf="!editCopy">{{issueDetails.duedate | date:'longDate'}}</span>
+			<mtc-date-picker *ngIf="editCopy" [initialDate]="editCopy.duedate" [title]=""
+							 (select)="editCopy.duedate = $event"></mtc-date-picker>
 		</div>
 
 		<div class="subheader" flex layout="row" layout-align="start end">

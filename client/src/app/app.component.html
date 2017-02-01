@@ -19,7 +19,7 @@
 	</span>
 </md-toolbar>
 <div class="app-main" layout="column" flex>
-	<app-sidebar layout="row"></app-sidebar>
+	<app-sidebar layout="row" [isAuthorized]="userService.isAdmin() || userService.isUser()"></app-sidebar>
 	<div layout="row" flex="75" class="main" id="main">
 		<div class="content" layout="column" flex>
 			<router-outlet></router-outlet>

@@ -24,6 +24,7 @@ import { AttachmentService } from './services/AttachmentService/attachment.servi
 import { UnauthComponent } from './unauth/unauth.component';
 import { ViewIssueComponent } from './view-issue/view-issue.component';
 import { CommentService } from './services/CommentService/comment.service';
+import { MoveIssuesComponent } from './permissions/move-issues/move-issues.component';
 
 @NgModule({
 	declarations: [
@@ -36,6 +37,7 @@ import { CommentService } from './services/CommentService/comment.service';
 		CreateIssueComponent,
 		UnauthComponent,
 		ViewIssueComponent,
+		MoveIssuesComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -62,6 +64,7 @@ import { CommentService } from './services/CommentService/comment.service';
 		NewUserComponent,
 		EditUserComponent,
 		NewStatusComponent,
+		MoveIssuesComponent,
 	]
 })
 export class AppModule {

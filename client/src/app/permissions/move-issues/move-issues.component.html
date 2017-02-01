@@ -1,0 +1,14 @@
+<md-progress-bar mode="indeterminate" *ngIf="showProgress"></md-progress-bar>
+<div class="move-issues" flex layout="column" layout-align="start center" *ngIf="!showProgress">
+	<h3 class="center">{{statuses.length === 0 ? 'Are you sure you want to delete this status?' : 'This status has issues in it. Need to reassign them.'}}</h3>
+	<select class="choose-status" [(ngModel)]="selectedStatusId" *ngIf="statuses.length > 0">
+		<option value="">Choose a new status</option>
+		<option *ngFor="let status of statuses" [value]="status.id">{{status.description}}</option>
+	</select>
+	<div class="button-row" flex layout="row" layout-align="start center">
+		<button md-raised-button color="primary" [disabled]="selectedStatusId === '' && statuses.length > 0" (click)="onSubmit()">
+			{{statuses.length === 0 ? "I'M SURE" : 'SUBMIT'}}
+		</button>
+		<button md-button class="cancel-button" (click)="dialogService.hide(null)">CANCEL</button>
+	</div>
+</div>

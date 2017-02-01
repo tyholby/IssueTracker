@@ -10,8 +10,8 @@ export class UserService {
 	};
 
 	// Observable string sources
-	private currentUserChangedSource: Subject<any> = new Subject<any>();
-	private currentLdsAccountSource: Subject<any> = new Subject<any>();
+	public currentUserChangedSource: Subject<any> = new Subject<any>();
+	public currentLdsAccountSource: Subject<any> = new Subject<any>();
 
 	// Observable string streams
 	public currentUser$: any = this.currentUserChangedSource.asObservable();

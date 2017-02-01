@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { IssueService } from '../../../services/IssueService/issue.service';
 
 @Component({
@@ -7,6 +7,7 @@ import { IssueService } from '../../../services/IssueService/issue.service';
 	styleUrls: ['sidebar.component.less']
 })
 export class SidebarComponent {
+	@Input() isAuthorized: boolean;
 	routes: any[];
 	active = 'Board';
 

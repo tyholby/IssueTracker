@@ -7,10 +7,10 @@ import { omit } from 'lodash';
 @Injectable()
 export class IssueService {
 	// Observable string sources
-	private openCreateSideNavSource: Subject<any> = new Subject<any>();
-	private openViewSideNavSource: Subject<any> = new Subject<any>();
-	private refreshIssuesSource: Subject<any> = new Subject<any>();
-	private filterSource: Subject<string> = new Subject<string>();
+	public openCreateSideNavSource: Subject<any> = new Subject<any>();
+	public openViewSideNavSource: Subject<any> = new Subject<any>();
+	public refreshIssuesSource: Subject<any> = new Subject<any>();
+	public filterSource: Subject<string> = new Subject<string>();
 	// Observable string streams
 	public openCreateSideNav$: any = this.openCreateSideNavSource.asObservable();
 	public openViewSideNav$: any = this.openViewSideNavSource.asObservable();
@@ -25,6 +25,9 @@ export class IssueService {
 	}
 	getIssueDetails(id) {
 		return this.http.get(`${this.hostname.travelUrl}issue/${id}`);
+	}
+	getIssuesForStatus(id) {
+		return this.http.get(`${this.hostname.travelUrl}issue/bystatus/${id}`);
 	}
 	addIssue(issue) {
 		return this.http.post(`${this.hostname.travelUrl}issue/`, JSON.stringify(issue));

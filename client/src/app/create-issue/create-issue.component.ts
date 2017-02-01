@@ -3,6 +3,7 @@ import { UserService } from '../services/UserService/user.service';
 import { IssueService } from '../services/IssueService/issue.service';
 import { StorageApiService } from 'mtc-modules';
 import { AttachmentService } from '../services/AttachmentService/attachment.service';
+import { StatusService } from '../services/StatusService/status.service';
 
 @Component({
 	selector: 'app-create-issue',
@@ -14,36 +15,41 @@ export class CreateIssueComponent implements OnInit {
 	@Input() createdBy: any;
 	issue: any = null;
 	users: Array<any>;
+	statuses: Array<any>;
 	attachments: Array<any>;
 	saving: boolean;
-	fileUploading: boolean;
+	loading: boolean;
 
 	constructor(private userService: UserService, private issueService: IssueService, private storageService: StorageApiService,
-				private attachmentService: AttachmentService) {
+				private attachmentService: AttachmentService, private statusService:StatusService) {
 		this.onClose = new EventEmitter<any>();
 		this.users = [];
+		this.statuses = [];
 		this.attachments = [];
 		this.saving = false;
-		this.fileUploading = false;
+		this.loading = false;
 	}
 
 	ngOnInit() {
 		this.userService.getUsers().subscribe(usersResponse => {
 			this.users = usersResponse.json();
-			this.issue = {
-				id: null, // set in backend
-				statusid: null, // set in backend
-				title: '',
-				description: '',
-				duedate: new Date(),
-				assigneeid: '',
-				createdbyid: this.createdBy.ldsid
-			};
+			this.statusService.getStatuses().subscribe(statusesResponse => {
+				this.statuses = statusesResponse.json();
+				this.issue = {
+					id: null, // set in backend
+					statusid: '',
+					title: '',
+					description: '',
+					duedate: new Date(),
+					assigneeid: '',
+					createdbyid: this.createdBy.ldsid
+				};
+			});
 		});
 	}
 
 	onFileSelected(event) {
-		this.fileUploading = true;
+		this.loading = true;
 		let file = event.target.files[0];
 		let reader = new FileReader();
 		reader.onload = (e: any) => {
@@ -64,7 +70,7 @@ export class CreateIssueComponent implements OnInit {
 					attacheddate: file.lastModified
 				};
 				this.attachments.push(attachment);
-				this.fileUploading = false;
+				this.loading = false;
 			});
 		};
 		if (file) {

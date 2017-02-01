@@ -49,6 +49,16 @@ public class IssueController {
         return new ResponseEntity<>(issues, HttpStatus.OK);
     }
 
+    @RequestMapping(method=RequestMethod.GET, value="/bystatus/{id}")
+    public @ResponseBody ResponseEntity<List<Issue>> getIssuesByStatus(@PathVariable String id) {
+//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+        if (request.getUserPrincipal() == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        List<Issue> issues = issueDAO.getIssuesByStatus(id);
+        return new ResponseEntity<>(issues, HttpStatus.OK);
+    }
+
     @RequestMapping(method=RequestMethod.GET, value="/{id}")
     public @ResponseBody ResponseEntity<IssueDetails> getIssueDetailsById(@PathVariable String id) {
 //        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
@@ -91,17 +101,19 @@ public class IssueController {
         if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        List<Status> statuses = statusDAO.getStatuses();
-        if (statuses.size() > 0) {
-            issue.setStatusid(statuses.get(0).getId());
-        }
-        else {
-            Status status = new Status();
-            status.setId(null);
-            status.setDescription("TODO");
-            status.setOrdernum("1");
-            status = statusDAO.createStatus(status);
-            issue.setStatusid(status.getId());
+        if (issue.getStatusid().length() == 0) {
+            List<Status> statuses = statusDAO.getStatuses();
+            if (statuses.size() > 0) {
+                issue.setStatusid(statuses.get(0).getId());
+            }
+            else {
+                Status status = new Status();
+                status.setId(null);
+                status.setDescription("TODO");
+                status.setOrdernum("1");
+                status = statusDAO.createStatus(status);
+                issue.setStatusid(status.getId());
+            }
         }
         Issue newIssue = issueDAO.createIssue(issue);
         return new ResponseEntity<>(newIssue, HttpStatus.OK);

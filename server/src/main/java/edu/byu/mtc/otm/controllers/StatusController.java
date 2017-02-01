@@ -21,6 +21,10 @@ public class StatusController {
     @Named("StatusDAO")
     private StatusDAO statusDAO;
 
+    @Inject
+    @Named("IssueDAO")
+    private IssueDAO issueDAO;
+
     private @Autowired HttpServletRequest request;
 
     @RequestMapping(method= RequestMethod.GET)
@@ -51,6 +55,17 @@ public class StatusController {
         }
         statuses = statusDAO.updateStatuses(statuses);
         return new ResponseEntity<>(statuses, HttpStatus.OK);
+    }
+
+    @RequestMapping(method=RequestMethod.PUT, value="/move")
+    public @ResponseBody ResponseEntity<String> moveStatusIssues(@RequestBody MoveStatusInstruction moveStatusInstruction){
+//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+        if (request.getUserPrincipal() == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        String id = statusDAO.deleteStatus(moveStatusInstruction.getId());
+        issueDAO.moveIssuesToStatus(moveStatusInstruction);
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
     @RequestMapping(method=RequestMethod.POST)
