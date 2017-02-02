@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { MTCHttp } from 'mtc-modules';
 import { HostnameService } from '../../core/services/hostname/hostname.service';
+import { WindowRefService } from '../../core/services/window-ref/window-ref.service';
 
 @Injectable()
 export class AttachmentService {
 	constructor(private hostname: HostnameService,
-				private http: MTCHttp) { }
+				private http: MTCHttp,
+				private windowRef: WindowRefService) { }
 
 	getAttachmentsByIssueId(issueId) {
 		return this.http.get(`${this.hostname.travelUrl}attachment/${issueId}`);
@@ -25,8 +27,7 @@ export class AttachmentService {
 	}
 
 	openAttachment(attachment) {
-		const win = window.open(attachment.url, '_blank');
+		const win = this.windowRef.getWindow().open(attachment.url, '_blank');
 		win.focus();
-		// TODO When clicking on the saved file, it should download to my computer??
 	}
 }

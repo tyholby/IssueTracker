@@ -25,6 +25,7 @@ import { UnauthComponent } from './unauth/unauth.component';
 import { ViewIssueComponent } from './view-issue/view-issue.component';
 import { CommentService } from './services/CommentService/comment.service';
 import { MoveIssuesComponent } from './permissions/move-issues/move-issues.component';
+import { TitleCasePipe } from './pipes/title-case/title-case.pipe';
 
 @NgModule({
 	declarations: [
@@ -38,6 +39,7 @@ import { MoveIssuesComponent } from './permissions/move-issues/move-issues.compo
 		UnauthComponent,
 		ViewIssueComponent,
 		MoveIssuesComponent,
+		TitleCasePipe,
 	],
 	imports: [
 		BrowserModule,

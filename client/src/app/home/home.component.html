@@ -28,7 +28,7 @@
 								<img class="user-avatar" src="{{'https://api.mtc.byu.edu/user/v1/users/' + user.ldsid}}"
 									 alt="User Photo" width="38" height="38">
 								<div class="issue-info" flex layout="column">
-									<span class="issue-title">{{issue.title}}</span>
+									<span class="issue-title">{{issue.title | titleCase}}</span>
 									<span class="issue-date">{{issue.duedate | date:'longDate'}}</span>
 								</div>
 							</div>

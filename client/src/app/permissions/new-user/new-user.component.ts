@@ -33,8 +33,8 @@ export class NewUserComponent implements OnInit {
 						ldsid: user.ldsId,
 						fullName: `${user.restOfName} ${user.surName}`,
 						role: null
-					}
-				})
+					};
+				});
 			});
 		}
 	}

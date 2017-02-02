@@ -6,7 +6,7 @@
 		<option *ngFor="let status of statuses" [value]="status.id">{{status.description}}</option>
 	</select>
 	<div class="button-row" flex layout="row" layout-align="start center">
-		<button md-raised-button color="primary" [disabled]="selectedStatusId === '' && statuses.length > 0" (click)="onSubmit()">
+		<button md-raised-button class="_submit-button" color="primary" [disabled]="selectedStatusId === '' && statuses.length > 0" (click)="onSubmit()">
 			{{statuses.length === 0 ? "I'M SURE" : 'SUBMIT'}}
 		</button>
 		<button md-button class="cancel-button" (click)="dialogService.hide(null)">CANCEL</button>

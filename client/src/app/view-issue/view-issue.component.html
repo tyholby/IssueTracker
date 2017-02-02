@@ -1,5 +1,5 @@
 <div class="view-issue" flex layout="column">
-	<div class="header" flex>{{issueDetails ? issueDetails.title : ''}}</div>
+	<div class="header" flex>{{issueDetails ? issueDetails.title : '' | titleCase}}</div>
 	<md-progress-bar class="progress" mode="indeterminate" *ngIf="!issueDetails"></md-progress-bar>
 	<div class="view-container" flex layout="column" *ngIf="issueDetails">
 		<i class="material-icons close-button" (click)="onClose.emit()">close</i>
@@ -71,8 +71,8 @@
 			<h5>ACTIONS</h5>
 		</div>
 		<div class="input-row" flex layout="row" layout-align="center">
-			<div class="add-button" (click)="editCopy ? onSaveEdit() : onEdit()">{{editCopy ? 'SAVE' : 'EDIT'}}</div>
-			<div class="delete-button" (click)="onDeleteIssue()">DELETE</div>
+			<div class="add-button _edit-save-button" (click)="editCopy ? onSaveEdit() : onEdit()">{{editCopy ? 'SAVE' : 'EDIT'}}</div>
+			<div class="delete-button _delete-issue-button" (click)="onDeleteIssue()">DELETE</div>
 		</div>
 
 		<div class="subheader" flex layout="row" layout-align="start end">
@@ -80,7 +80,7 @@
 		</div>
 		<div class="input-row" flex layout="row" layout-align="start center">
 			<textarea rows="4" flex="80" placeholder="Add a comment" [(ngModel)]="newComment"></textarea>
-			<div class="add-button" (click)="onNewCommentSubmit()">SUBMIT</div>
+			<div class="add-button _add-comment-button" (click)="onNewCommentSubmit()">SUBMIT</div>
 		</div>
 		<div class="input-row" flex layout="column" layout-align="start" *ngFor="let comment of issueDetails.comments">
 			<div class="comment-header" layout="row">

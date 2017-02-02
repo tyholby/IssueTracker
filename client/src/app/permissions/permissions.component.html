@@ -2,7 +2,7 @@
 	<div class="permissions-main" layout="column" flex="33">
 		<div class="permissions-header" layout="row" layout-align="start center">
 			<h3 flex>Current Users</h3>
-			<div class="add-button" (click)="onAddUserClick()" *ngIf="userService.isAdmin(userService.currentUser)">ADD +</div>
+			<div class="add-button _add-user-button" (click)="onAddUserClick()" *ngIf="userService.isAdmin(userService.currentUser)">ADD +</div>
 		</div>
 		<div class="permissions-row" layout="column" layout-align="start start">
 			<div class="subheader" flex layout="row" layout-align="start end">
@@ -11,7 +11,7 @@
 			<div class="user-row" flex *ngFor="let admin of admins" layout="row" layout-align="start center">
 				<img class="user-avatar" src="{{'https://api.mtc.byu.edu/user/v1/users/' + admin.ldsid}}" alt="User Photo" width="30">
 				<span flex>{{admin.fullName}}</span>
-				<i class="material-icons edit-button" *ngIf="userService.isAdmin(userService.currentUser)" (click)="onEditUser(admin)"> edit </i>
+				<i class="material-icons edit-button _edit-user-button" *ngIf="userService.isAdmin(userService.currentUser)" (click)="onEditUser(admin)"> edit </i>
 			</div>
 
 			<div class="subheader" flex layout="row" layout-align="start end">
@@ -26,18 +26,18 @@
 		<div class="permissions-header" layout="row" layout-align="start center">
 			<h3 flex>Status List</h3>
 			<div class="edit-statuses-button" (click)="editStatuses ? saveStatuses() : onEditStatusesClick()" *ngIf="userService.isAdmin(userService.currentUser)">{{editStatuses ? 'SAVE' : 'EDIT'}}</div>
-			<div class="add-button" (click)="onAddStatusClick()" *ngIf="userService.isAdmin(userService.currentUser)">ADD +</div>
+			<div class="add-button _add-status-button" (click)="onAddStatusClick()" *ngIf="userService.isAdmin(userService.currentUser)">ADD +</div>
 		</div>
 		<div class="permissions-row" layout="column" layout-align="start start">
 			<div class="subheader" flex layout="row" layout-align="start end">
 				<h5>SWIMLANES</h5>
 			</div>
 			<div class="statuses-container" flex layout="column" dnd-sortable-container [sortableData]="statuses" *ngIf="userService.isAdmin()">
-				<div class="status-row" flex dnd-sortable [sortableIndex]="i" (dragend)="fixStatusOrders()"
+				<div class="status-row _status-draggable" flex dnd-sortable [sortableIndex]="i" (dragend)="fixStatusOrders()"
 					 *ngFor="let status of statuses; let i = index" layout="row" layout-align="start center">
 					<input class="edit-status-name" *ngIf="editStatuses" type="text" flex placeholder="status name" [(ngModel)]="status.description" (keyup)="status.edited = true">
 					<span  flex *ngIf="!editStatuses">{{status.description}}</span>
-					<i class="material-icons edit-button" (click)="onDeleteStatus(status)"> close </i>
+					<i class="material-icons edit-button _delete-status-button" (click)="onDeleteStatus(status)"> close </i>
 				</div>
 			</div>
 			<div class="statuses-container" flex layout="column" dnd-sortable-container [sortableData]="statuses" *ngIf="userService.isUser()">

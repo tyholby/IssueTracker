@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, inject } from '@angular/core/testing';
-import { HostnameService } from '../app/core/services/hostname/hostname.service';
+import { HostnameService, WindowRefService } from '../app/core/services';
 import { MTCHttp } from 'mtc-modules';
 import { BaseRequestOptions, Response, Http, BaseResponseOptions, ConnectionBackend } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
@@ -10,6 +10,17 @@ class MockHostnameService {
 	public travelUrl:string = 'travel';
 	public url:string = 'url';
 	public missionarySystemsUrl:string = 'msSystems';
+}
+class MockWindowRefService {
+	public getWindow() {
+		return {
+			open: (arg1, arg2) => {
+				return {
+					focus: () => {}
+				};
+			}
+		};
+	}
 }
 
 export class HttpServiceTestHelper {
@@ -26,6 +37,7 @@ export class HttpServiceTestHelper {
 				{ provide: component, useClass: component },
 				{ provide: MockBackend, useClass: MockBackend },
 				{ provide: HostnameService, useClass: MockHostnameService },
+				{ provide: WindowRefService, useClass: MockWindowRefService },
 				{ provide: BaseRequestOptions, useClass: BaseRequestOptions },
 				{ provide: MTCHttp, useClass: MTCHttp}
 			]

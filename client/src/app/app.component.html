@@ -2,23 +2,24 @@
 <mtc-dialog></mtc-dialog>
 <mtc-layout></mtc-layout>
 <simple-notifications [options]="toastOptions"></simple-notifications>
-<md-toolbar flex color="primary">
+<md-toolbar flex color="primary" class="app-toolbar">
 	<div flex="5" id="mtc-logo">
 		<img src="../assets/images/mtclogo.svg" alt="logo">
 	</div>
 	<span flex="20">Issue Tracker</span>
 	<div flex class="app-search-container" layout="row">
 		<input type="text" [(ngModel)]="searchText" class="search-bar">
-		<div class="search-button" (click)="filter()">
+		<div class="app-search-button" (click)="issueService.filter(searchText)">
 			<i class="material-icons search-icon"> search </i>
 		</div>
 	</div>
-	<span flex="10" class="user-name" layout="row" layout-align="end">
+	<span flex="10" class="user-name" layout="row" layout-align="end" (click)="logoutVisible = !logoutVisible">
 		{{username}}
-			<i class="material-icons"> arrow_drop_down </i>
+			<i class="material-icons"> {{logoutVisible ? 'arrow_drop_up' : 'arrow_drop_down'}} </i>
 	</span>
 </md-toolbar>
 <div class="app-main" layout="column" flex>
+	<div id="logout-dropdown" *ngIf="logoutVisible" (click)="logout()">LOGOUT</div>
 	<app-sidebar layout="row" [isAuthorized]="userService.isAdmin() || userService.isUser()"></app-sidebar>
 	<div layout="row" flex="75" class="main" id="main">
 		<div class="content" layout="column" flex>

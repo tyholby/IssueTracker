@@ -5,9 +5,9 @@ import { IssueService } from '../services/IssueService/issue.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.less']
+	selector: 'app-home',
+	templateUrl: './home.component.html',
+	styleUrls: ['./home.component.less']
 })
 export class HomeComponent implements OnInit {
 	statuses = [];
@@ -20,15 +20,16 @@ export class HomeComponent implements OnInit {
 				private statusService: StatusService,
 				private issueService: IssueService,
 				private router: Router) {
-		this.issueService.filter$.subscribe(searchText => {
-			this.searchText = searchText;
-		});
 	}
 
 	ngOnInit() {
 		if (this.userService.userLoaded() && !(this.userService.isAdmin() || this.userService.isUser())) {
-			this.router.navigate(['/unauth'])
+			this.router.navigate(['/unauth']);
+			return;
 		}
+		this.issueService.filter$.subscribe(searchText => {
+			this.searchText = searchText;
+		});
 		this.issueService.refreshIssues$.subscribe(issue => {
 			this.resetIssues();
 		});
@@ -85,7 +86,7 @@ export class HomeComponent implements OnInit {
 
 	filter(issue) {
 		const lowercased = this.searchText.toLowerCase();
-		return this.searchText === '' || issue.title.toLowerCase().includes(lowercased) || issue.assigneeName.toLowerCase().includes(lowercased)
+		return this.searchText === '' || issue.title.toLowerCase().includes(lowercased) || issue.assigneeName.toLowerCase().includes(lowercased);
 	}
 
 	addIssueByStatus(issuesObject, issue, toStatusId) {

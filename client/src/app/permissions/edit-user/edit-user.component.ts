@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MTCDialogService } from 'mtc-modules';
 import { UserService } from '../../services/UserService/user.service';
-import { IssueService } from '../../services/IssueService/issue.service';
 
 @Component({
 	selector: 'app-edit-user',
@@ -28,7 +27,9 @@ export class EditUserComponent implements OnInit {
 			if (this.userService.currentUser.ldsid === this.selectedUser.ldsid) {
 				this.userService.setCurrentUserSource(this.selectedUser);
 			}
-			else (this.userService.setCurrentUserSource(this.userService.currentUser))
+			else {
+				this.userService.setCurrentUserSource(this.userService.currentUser);
+			}
 		});
 	}
 

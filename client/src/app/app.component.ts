@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
 	};
 	username = '';
 	searchText = '';
+	logoutVisible = false;
 	createIssueData = null;
 	viewIssueData = null;
 
@@ -37,22 +38,17 @@ export class AppComponent implements OnInit {
 		});
 		this.userService.currentLdsAccount$.subscribe(account => this.username = account.name);
 		this.MTCUser.getUser().subscribe((ldsAccount) => {
-			console.log('MTCUser.getUser()', ldsAccount);
 			this.userService.setCurrentLdsAccountSource(ldsAccount);
 			this.userService.getUser(ldsAccount.id).subscribe((userResponse) => {
 				this.userService.setCurrentUserSource(userResponse.json());
 				if (!(this.userService.isAdmin() || this.userService.isUser())) {
-					this.router.navigate(['/unauth'])
+					this.router.navigate(['/unauth']);
 				}
 			});
 		});
 	}
 
-	filter() {
-		this.issueService.filter(this.searchText);
-	}
-
-	logout() {
+	logout(){
 		MTCAuth.logout();
 	}
 

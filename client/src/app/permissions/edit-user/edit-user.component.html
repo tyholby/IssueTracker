@@ -7,13 +7,13 @@
 	<div class="user-level-row" flex layout="row" layout-align="start center">
 		<span flex="20"></span>
 		<span flex="30">User Level:</span>
-		<div flex="15" class="role-choice" [class.role-active]="selectedUser.role === 'admin'" (click)="setRole('admin')">Admin</div>
-		<div flex="15" class="role-choice" [class.role-active]="selectedUser.role === 'user'" (click)="setRole('user')">User</div>
+		<div flex="15" class="role-choice _admin-role-selector" [class.role-active]="selectedUser.role === 'admin'" (click)="setRole('admin')">Admin</div>
+		<div flex="15" class="role-choice _user-role-selector" [class.role-active]="selectedUser.role === 'user'" (click)="setRole('user')">User</div>
 		<span flex="20"></span>
 	</div>
 	<h3 *ngIf="showDeleteConfirmation" class="warning-text">Are you sure you want to delete?</h3>
 	<div class="button-row" flex layout="row" layout-align="start center">
-		<button md-raised-button color="warn" [disabled]="showProgress" (click)="!showDeleteConfirmation ? showDeleteConfirmation = true : onDelete()">
+		<button md-raised-button color="warn" class="_delete-button" [disabled]="showProgress" (click)="!showDeleteConfirmation ? showDeleteConfirmation = true : onDelete()">
 			{{!showDeleteConfirmation ? 'DELETE' : 'I\'M SURE'}}
 		</button>
 		<button md-button class="cancel-button" (click)="onDone()">BACK</button>

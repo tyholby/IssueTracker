@@ -17,3 +17,19 @@ export class ListStubComponent {
 export class ListItemStubComponent {
 
 }
+
+@Component({
+	selector: 'md-toolbar',
+	template: ``
+})
+export class ToolbarStubComponent {
+
+}
+
+@Component({
+	selector: 'md-progress-bar',
+	template: ''
+})
+export class ProgressBarStubComponent {
+
+}

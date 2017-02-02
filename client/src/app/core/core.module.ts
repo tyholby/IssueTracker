@@ -13,6 +13,7 @@ import {
 	WindowRefService,
 	HostnameService,
 } from './services';
+
 let dialogComponents = [
 ];
 
@@ -27,7 +28,7 @@ let directives = [
 let services = [
 	WindowRefService,
 	HostnameService,
-	DatePipe,
+	DatePipe
 ];
 
 let modules = [

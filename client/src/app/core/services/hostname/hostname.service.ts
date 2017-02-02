@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { WindowRefService } from '../window-ref';
 
 @Injectable()
@@ -11,8 +11,6 @@ export class HostnameService {
 	}
 
 	init() {
-		let url = '';
-		let env = '';
 		let win = this.windowRefService.getWindow();
 		if (win.location.hostname.includes('support-apps.mtc.byu.edu')) {
 			this.url = 'https://supportapplications.mtc.byu.edu/';

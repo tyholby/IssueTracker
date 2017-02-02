@@ -30,7 +30,8 @@ export class PermissionsComponent implements OnInit {
 
 	ngOnInit() {
 		if (this.userService.userLoaded() && !(this.userService.isAdmin() || this.userService.isUser())) {
-			this.router.navigate(['/unauth'])
+			this.router.navigate(['/unauth']);
+			return;
 		}
 		this.userService.currentUser$.subscribe(user => {
 			this.resetUsers();

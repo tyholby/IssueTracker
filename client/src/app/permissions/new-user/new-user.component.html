@@ -1,7 +1,7 @@
 <div class="new-user" flex layout="column" layout-align="start center">
-	<input class="search" type="text" flex="25" placeholder="search user" [(ngModel)]="searchText" (keyup)="onSearch()">
+	<input class="search _search-accounts" type="text" flex="25" placeholder="search user" [(ngModel)]="searchText" (keyup)="onSearch()">
 	<div class="search-results" *ngIf="!selectedUser && searchResults.length > 0">
-		<div class="user-row" *ngFor="let result of searchResults" layout="row" layout-align="start center" (click)="onResultClick(result)">
+		<div class="user-row _result-selector" *ngFor="let result of searchResults" layout="row" layout-align="start center" (click)="onResultClick(result)">
 			<img class="user-avatar" src="{{'https://api.mtc.byu.edu/user/v1/users/' + result.ldsid}}" alt="User Photo" width="30">
 			{{result.fullName}}
 		</div>
@@ -14,12 +14,12 @@
 	<div *ngIf="selectedUser" class="user-level-row" flex layout="row" layout-align="start center">
 		<span flex="20"></span>
 		<span flex="30">User Level:</span>
-		<div flex="15" class="role-choice" [class.role-active]="selectedUser.role === 'admin'" (click)="setRole('admin')">Admin</div>
-		<div flex="15" class="role-choice" [class.role-active]="selectedUser.role === 'user'" (click)="setRole('user')">User</div>
+		<div flex="15" class="role-choice _admin-role-selector" [class.role-active]="selectedUser.role === 'admin'" (click)="setRole('admin')">Admin</div>
+		<div flex="15" class="role-choice _user-role-selector" [class.role-active]="selectedUser.role === 'user'" (click)="setRole('user')">User</div>
 		<span flex="20"></span>
 	</div>
 	<div class="button-row" flex layout="row" layout-align="start center">
-		<button md-raised-button color="primary" [disabled]="!selectedUser || selectedUser.role === null || showProgress" (click)="onSubmit()">SUBMIT</button>
+		<button md-raised-button class="_submit-button" color="primary" [disabled]="!selectedUser || selectedUser.role === null || showProgress" (click)="onSubmit()">SUBMIT</button>
 		<button md-button class="cancel-button" (click)="onCancel()">CANCEL</button>
 	</div>
 </div>
