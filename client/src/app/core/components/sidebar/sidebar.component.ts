@@ -15,6 +15,7 @@ export class SidebarComponent {
 		this.routes = [
 			{url: '', name:'Board'},
 			{url: 'permissions', name:'Permissions'},
+			{url: 'calendar', name:'Calendar'},
 		];
 	}
 

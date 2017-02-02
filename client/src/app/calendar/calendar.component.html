@@ -1,0 +1,21 @@
+<div class="issue-tracker-calendar" layout="column">
+	<div class="controls" layout="row" layout-align="start center">
+		<i class="material-icons"
+		   mwlCalendarPreviousView
+		   [(viewDate)]="viewDate"
+		   [view]="view">
+			keyboard_arrow_left
+		</i>
+		<span>{{viewDate | date:'MMMM y'}}</span>
+		<i class="material-icons"
+		   mwlCalendarNextView
+		   [(viewDate)]="viewDate"
+		   [view]="view">
+			keyboard_arrow_right
+		</i>
+	</div>
+	<mwl-calendar-month-view
+			class="issue-tracker-calendar"
+			[(viewDate)]="viewDate">
+	</mwl-calendar-month-view>
+</div>

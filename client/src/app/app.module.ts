@@ -26,6 +26,8 @@ import { ViewIssueComponent } from './view-issue/view-issue.component';
 import { CommentService } from './services/CommentService/comment.service';
 import { MoveIssuesComponent } from './permissions/move-issues/move-issues.component';
 import { TitleCasePipe } from './pipes/title-case/title-case.pipe';
+import { CalendarComponent } from './calendar/calendar.component';
+import { CalendarModule } from 'angular-calendar';
 
 @NgModule({
 	declarations: [
@@ -40,6 +42,7 @@ import { TitleCasePipe } from './pipes/title-case/title-case.pipe';
 		ViewIssueComponent,
 		MoveIssuesComponent,
 		TitleCasePipe,
+		CalendarComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -51,7 +54,8 @@ import { TitleCasePipe } from './pipes/title-case/title-case.pipe';
 		MaterialModule.forRoot(),
 		RouterModule.forRoot(routes, { useHash: true }),
 		DndModule.forRoot(),
-		SimpleNotificationsModule
+		CalendarModule.forRoot(),
+		SimpleNotificationsModule,
 	],
 	providers: [
 		UserService,
