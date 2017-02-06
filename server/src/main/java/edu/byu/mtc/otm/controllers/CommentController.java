@@ -29,8 +29,8 @@ public class CommentController {
 
     @RequestMapping(method=RequestMethod.GET, value="/{id}")
     public @ResponseBody ResponseEntity<List<Comment>> getCommentsByIssueId(@PathVariable String id) {
-//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
-        if (request.getUserPrincipal() == null) {
+        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         List<Comment> comments = commentDAO.getCommentsByIssueId(id);
@@ -39,8 +39,8 @@ public class CommentController {
 
     @RequestMapping(method= RequestMethod.PUT)
     public @ResponseBody ResponseEntity<Comment> updateComment(@RequestBody Comment comment){
-//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
-        if (request.getUserPrincipal() == null) {
+        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         comment = commentDAO.updateComment(comment);
@@ -49,8 +49,8 @@ public class CommentController {
 
     @RequestMapping(method=RequestMethod.POST)
     public @ResponseBody ResponseEntity<Comment> createComment(@RequestBody Comment comment){
-//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
-        if (request.getUserPrincipal() == null) {
+        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         Comment newComment = commentDAO.createComment(comment);
@@ -60,8 +60,8 @@ public class CommentController {
 
     @RequestMapping(method=RequestMethod.DELETE, value="/{id}")
     public @ResponseBody ResponseEntity<String> deleteComment(@PathVariable String id){
-//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
-        if (request.getUserPrincipal() == null) {
+        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         id = commentDAO.deleteComment(id);

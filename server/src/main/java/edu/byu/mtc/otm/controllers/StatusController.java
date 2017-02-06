@@ -29,8 +29,8 @@ public class StatusController {
 
     @RequestMapping(method= RequestMethod.GET)
     public @ResponseBody ResponseEntity<List<Status>> getStatuses() {
-//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
-        if (request.getUserPrincipal() == null) {
+        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         List<Status> statuses = statusDAO.getStatuses();
@@ -39,8 +39,8 @@ public class StatusController {
 
     @RequestMapping(method=RequestMethod.GET, value="/{id}")
     public @ResponseBody ResponseEntity<Status> getStatusById(@PathVariable String id) {
-//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
-        if (request.getUserPrincipal() == null) {
+        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         Status status = statusDAO.getStatusById(id);
@@ -49,8 +49,8 @@ public class StatusController {
 
     @RequestMapping(method= RequestMethod.PUT)
     public @ResponseBody ResponseEntity<List<Status>> updateStatuses(@RequestBody List<Status> statuses){
-//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
-        if (request.getUserPrincipal() == null) {
+        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         statuses = statusDAO.updateStatuses(statuses);
@@ -59,8 +59,8 @@ public class StatusController {
 
     @RequestMapping(method=RequestMethod.PUT, value="/move")
     public @ResponseBody ResponseEntity<String> moveStatusIssues(@RequestBody MoveStatusInstruction moveStatusInstruction){
-//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
-        if (request.getUserPrincipal() == null) {
+        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         String id = statusDAO.deleteStatus(moveStatusInstruction.getId());
@@ -70,8 +70,8 @@ public class StatusController {
 
     @RequestMapping(method=RequestMethod.POST)
     public @ResponseBody ResponseEntity<Status> createSingleStatus(@RequestBody Status status){
-//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
-        if (request.getUserPrincipal() == null) {
+        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         Status newStatus = statusDAO.createStatus(status);
@@ -80,8 +80,8 @@ public class StatusController {
 
     @RequestMapping(method=RequestMethod.DELETE, value="/{id}")
     public @ResponseBody ResponseEntity<String> deleteStatus(@PathVariable String id){
-//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
-        if (request.getUserPrincipal() == null) {
+        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         id = statusDAO.deleteStatus(id);

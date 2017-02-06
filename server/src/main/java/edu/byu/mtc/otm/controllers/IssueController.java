@@ -41,8 +41,8 @@ public class IssueController {
 
     @RequestMapping(method= RequestMethod.GET)
     public @ResponseBody ResponseEntity<List<Issue>> getIssues() {
-//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
-        if (request.getUserPrincipal() == null) {
+        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         List<Issue> issues = issueDAO.getIssues();
@@ -51,8 +51,8 @@ public class IssueController {
 
     @RequestMapping(method=RequestMethod.GET, value="/bystatus/{id}")
     public @ResponseBody ResponseEntity<List<Issue>> getIssuesByStatus(@PathVariable String id) {
-//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
-        if (request.getUserPrincipal() == null) {
+        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         List<Issue> issues = issueDAO.getIssuesByStatus(id);
@@ -61,8 +61,8 @@ public class IssueController {
 
     @RequestMapping(method=RequestMethod.GET, value="/{id}")
     public @ResponseBody ResponseEntity<IssueDetails> getIssueDetailsById(@PathVariable String id) {
-//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
-        if (request.getUserPrincipal() == null) {
+        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         IssueDetails issueDetails = new IssueDetails();
@@ -87,8 +87,8 @@ public class IssueController {
 
     @RequestMapping(method= RequestMethod.PUT)
     public @ResponseBody ResponseEntity<List<Issue>> updateIssues(@RequestBody List<Issue> issues){
-//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
-        if (request.getUserPrincipal() == null) {
+        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         issues = issueDAO.updateIssues(issues);
@@ -97,8 +97,8 @@ public class IssueController {
 
     @RequestMapping(method=RequestMethod.POST)
     public @ResponseBody ResponseEntity<Issue> createSingleIssue(@RequestBody Issue issue){
-//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
-        if (request.getUserPrincipal() == null) {
+        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         if (issue.getStatusid().length() == 0) {
@@ -121,8 +121,8 @@ public class IssueController {
 
     @RequestMapping(method=RequestMethod.DELETE, value="/{id}")
     public @ResponseBody ResponseEntity<String> deleteIssue(@PathVariable String id){
-//        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
-        if (request.getUserPrincipal() == null) {
+        if (request.getUserPrincipal() == null || (!request.isUserInRole("developer"))) {
+//        if (request.getUserPrincipal() == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         id = issueDAO.deleteIssue(id);
