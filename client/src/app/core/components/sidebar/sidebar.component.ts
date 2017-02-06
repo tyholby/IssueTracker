@@ -9,7 +9,7 @@ import { IssueService } from '../../../services/IssueService/issue.service';
 export class SidebarComponent {
 	@Input() isAuthorized: boolean;
 	routes: any[];
-	active = 'Board';
+	active = '';
 
 	constructor(private issueService: IssueService) {
 		this.routes = [

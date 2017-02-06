@@ -27,7 +27,7 @@ import { CommentService } from './services/CommentService/comment.service';
 import { MoveIssuesComponent } from './permissions/move-issues/move-issues.component';
 import { TitleCasePipe } from './pipes/title-case/title-case.pipe';
 import { CalendarComponent } from './calendar/calendar.component';
-import { CalendarModule } from 'angular-calendar';
+import { CalendarComponent as Angular2FullCalendarComponent } from "angular2-fullcalendar/src/calendar/calendar";
 
 @NgModule({
 	declarations: [
@@ -43,6 +43,7 @@ import { CalendarModule } from 'angular-calendar';
 		MoveIssuesComponent,
 		TitleCasePipe,
 		CalendarComponent,
+		Angular2FullCalendarComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -54,7 +55,6 @@ import { CalendarModule } from 'angular-calendar';
 		MaterialModule.forRoot(),
 		RouterModule.forRoot(routes, { useHash: true }),
 		DndModule.forRoot(),
-		CalendarModule.forRoot(),
 		SimpleNotificationsModule,
 	],
 	providers: [
