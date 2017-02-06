@@ -68,6 +68,11 @@ describe('Service: User', () => {
 		expect(service.currentUserChangedSource.next).toHaveBeenCalledWith(user);
 	}));
 
+	it('should find unauth user', inject([UserService], (service: UserService) => {
+		service.setCurrentUserSource(null);
+		expect(service.unAuthUserFound).toBe(true);
+	}));
+
 	it('should set current lds user', inject([UserService], (service: UserService) => {
 		spyOn(service.currentLdsAccountSource, 'next').and.callThrough();
 		const user = {

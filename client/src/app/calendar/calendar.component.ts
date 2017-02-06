@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IssueService } from '../services/IssueService/issue.service';
 import { UserService } from '../services/UserService/user.service';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-calendar',
@@ -12,7 +13,11 @@ export class CalendarComponent implements OnInit {
 	calendarOptions = null;
 	searchText = '';
 
-	constructor(private issueService: IssueService, private userService: UserService) {
+	constructor(private issueService: IssueService, private userService: UserService, private router: Router) {
+		if (this.userService.userLoaded() && !(this.userService.isAdmin() || this.userService.isUser())) {
+			this.router.navigate(['/unauth']);
+			return;
+		}
 		this.issueService.filter$.subscribe(searchText => {
 			this.searchText = searchText;
 			let temp = Object.assign({}, this.calendarOptions);

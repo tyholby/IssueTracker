@@ -8,6 +8,7 @@ export class UserService {
 	public currentUser: any = {
 		role: null
 	};
+	unAuthUserFound = false;
 
 	// Observable string sources
 	public currentUserChangedSource: Subject<any> = new Subject<any>();
@@ -37,19 +38,24 @@ export class UserService {
 	}
 
 	userLoaded() {
-		return !!this.currentUser.ldsid;
+		return this.unAuthUserFound || !!this.currentUser.ldsid;
 	}
 	isAdmin(user = this.currentUser) {
-		return user.role === 'admin';
+		return !this.unAuthUserFound && user.role === 'admin';
 	}
 	isUser(user = this.currentUser) {
-		return user.role === 'user';
+		return !this.unAuthUserFound && user.role === 'user';
 	}
 	searchUsers(name) {
 		return this.http.get(`https://api.mtc.byu.edu/user/v1/users?search=${name}`);
 	}
 	setCurrentUserSource(currentUser){
-		this.currentUser = currentUser;
+		if (currentUser === null) {
+			this.unAuthUserFound = true;
+		}
+		else {
+			this.currentUser = currentUser;
+		}
 		this.currentUserChangedSource.next(this.currentUser);
 	}
 	setCurrentLdsAccountSource(ldsAccount){

@@ -24,6 +24,7 @@ class MTCUserStub {
 }
 
 let currentUser = { ldsid: '123', role: 'admin', fullName: 'test name' };
+let _body = '';
 class UserServiceStub {
 	public currentUser = currentUser;
 	public get currentLdsAccount$() {
@@ -32,9 +33,16 @@ class UserServiceStub {
 	public setCurrentLdsAccountSource(account) {}
 	public setCurrentUserSource(user) {}
 	public getUser(id) {
-		return returnObserverWithCallback({
-			currentUser
-		}, true);
+		return {
+			subscribe(callback){
+				callback({
+					_body,
+					json(){
+						return currentUser;
+					}
+				});
+			}
+		};
 	}
 	public isAdmin() {
 		return currentUser.role === 'admin';
@@ -99,10 +107,13 @@ describe('AppComponent: Client', () => {
 	it('should get user and not navigate on init', async(() => {
 		spyOn(router, 'navigate').and.callThrough();
 		fixture.detectChanges();
+		_body = 'test';
+		fixture.detectChanges();
 		expect(router.navigate).not.toHaveBeenCalled();
 	}));
 
 	it('should get user and navigate on init', async(() => {
+		_body = 'test';
 		currentUser.role = 'test';
 		spyOn(router, 'navigate').and.callThrough();
 		fixture.detectChanges();
@@ -111,6 +122,7 @@ describe('AppComponent: Client', () => {
 	}));
 
 	it('should logout properly', () => {
+		_body = 'test';
 		comp.logoutVisible = true;
 		fixture.detectChanges();
 		let MTCAuth = {

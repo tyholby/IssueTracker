@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
 		this.MTCUser.getUser().subscribe((ldsAccount) => {
 			this.userService.setCurrentLdsAccountSource(ldsAccount);
 			this.userService.getUser(ldsAccount.id).subscribe((userResponse) => {
-				this.userService.setCurrentUserSource(userResponse.json());
+				this.userService.setCurrentUserSource(userResponse._body.length ? userResponse.json() : null);
 				if (!(this.userService.isAdmin() || this.userService.isUser())) {
 					this.router.navigate(['/unauth']);
 				}
